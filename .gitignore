@@ -1,0 +1,19 @@
+# Development files
+ShapeShifter-master/
+svg-autofix/
+svg-morph-fixer/
+apngs/
+
+# Webflow development files
+webflow-*.html
+webflow-*.md
+GITHUB_UPLOAD_GUIDE.md
+mood-data.txt
+
+# System files
+.DS_Store
+*.DS_Store
+
+# Other development files
+app.html
+anxious.png
