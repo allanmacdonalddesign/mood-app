@@ -7,18 +7,27 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.15/paper-full.min.js"></script>
   <style>
-      html, body {
+    :root {
+      --page-bg: white;
+      --page-text: #333;
+      --page-stroke: #333;
+    }
+
+    html, body {
     margin: 0;
     padding: 0;
     height: 100%;
+    background: var(--page-bg);
+    color: var(--page-text);
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   #background {
     position: relative;
     width: 100%;
     height: 100%;
-    background: #f0f8ff; /* Default background */
-  transition: background-color 0.5s ease; /* 👈 This is the magic */
+    background: var(--page-bg);
+    transition: background-color 0.5s ease; /* 👈 This is the magic */
   }
 
   canvas {
@@ -55,14 +64,15 @@
   background: transparent;
   padding: 12px 24px;
   border-radius: 25px;
-  border: 2px solid;
+  border: 2px solid var(--page-stroke);
+  color: var(--page-text);
   font-family: 'SF Pro Display', 'Helvetica Neue', 'Avenir Next', 'Segoe UI', 'Roboto', sans-serif;
   font-weight: 700;
   font-size: 18px;
   letter-spacing: 0.5px;
   cursor: pointer;
   pointer-events: auto;
-  transition: transform 0.1s ease, opacity 0.1s ease;
+  transition: transform 0.1s ease, opacity 0.1s ease, border-color 0.3s ease, color 0.3s ease;
   user-select: none;
 }
 
@@ -77,13 +87,14 @@
   left: 50%;
   transform: translateX(-50%);
   background: transparent;
-  border: 2px solid;
+  border: 2px solid var(--page-stroke);
+  color: var(--page-text);
   padding: 12px 24px;
   border-radius: 25px;
   font-weight: bold;
   font-size: 16px;
   cursor: pointer;
-  transition: transform 0.1s ease, opacity 0.1s ease;
+  transition: transform 0.1s ease, opacity 0.1s ease, border-color 0.3s ease, color 0.3s ease;
   pointer-events: auto;
   z-index: 10;
 }
@@ -184,85 +195,177 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: #f8f9fa;
+  background: var(--page-bg);
+  color: var(--page-text);
   z-index: 200;
-  padding: 20px;
+  padding: 0;
   box-sizing: border-box;
   overflow-y: auto;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Termina', 'Gabarito', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #calendarHeader {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  margin-bottom: 30px;
-  max-width: 720px;
+  padding: 45px 0 40px;
+  position: relative;
+  border-top: 1px solid var(--page-stroke);
+  border-bottom: 1px solid var(--page-stroke);
+  margin-top: 40px;
+  margin-bottom: 40px;
+  width: 600px;
   margin-left: auto;
   margin-right: auto;
+  transition: border-color 0.3s ease;
 }
 
 #calendarHeader button {
-  background: #333;
-  color: white;
+  background: var(--page-stroke);
+  color: var(--page-bg);
   border: none;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  font-size: 20px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+}
+
+#calendarHeader button:first-child {
+  left: 0;
+}
+
+#calendarHeader button:last-child {
+  right: 0;
 }
 
 #calendarHeader button:hover {
-  background: #555;
-  transform: scale(1.1);
+  background: var(--page-text);
+  opacity: 0.8;
 }
 
-#calendarMonth {
-  font-size: 28px;
+#calendarMonthYear {
+  display: flex;
+  align-items: baseline;
+  gap: 100px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#calendarMonthNumber {
+  font-size: 48px;
   font-weight: bold;
-  color: #333;
-  margin: 0;
+  color: var(--page-text);
+  line-height: 1;
+  transition: color 0.3s ease;
+}
+
+#calendarYear {
+  font-size: 48px;
+  font-weight: bold;
+  color: var(--page-text);
+  line-height: 1;
+  transition: color 0.3s ease;
+}
+
+#calendarContent {
+  display: flex;
+  align-items: center;
+  gap: 0px;
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 60px;
+  justify-content: center;
+  position: relative;
+  margin: 0 auto;
+}
+
+#calendarMonthName {
+  font-size: 180px;
+  font-weight: bold;
+  color: var(--page-text);
+  writing-mode: horizontal-tb;
+  text-orientation: mixed;
+  line-height: 0.8;
+  letter-spacing: -2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  transform: rotate(270deg);
+  position: absolute;
+  left: -15px;
+  transition: color 0.3s ease;
 }
 
 #calendarGrid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 2px;
-  max-width: 720px;
-  margin: 0 auto 30px;
-  background: #ddd;
-  padding: 2px;
-  border-radius: 10px;
+  gap: 1px;
+  background: var(--page-stroke);
+  padding: 1px;
+  width: 100%;
+  max-width: 600px;
+  transition: background-color 0.3s ease;
+}
+
+.calendar-day-header {
+  background: var(--page-bg);
+  font-weight: 300;
+  color: var(--page-text);
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.calendar-day-header:hover {
+  background: var(--page-bg);
+  transform: none;
 }
 
 .calendar-day {
   aspect-ratio: 1;
-  background: white;
+  background: var(--page-bg);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
+  font-weight: 300;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease, background-color 0.3s ease, color 0.3s ease;
   position: relative;
-  border-radius: 4px;
+  font-size: 16px;
+  color: var(--page-text);
 }
 
 .calendar-day:hover {
-  background: #f0f0f0;
-  transform: scale(1.05);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .calendar-day.has-mood {
+  background: #ff6b35;
+  color: white;
   position: relative;
   overflow: hidden;
 }
 
 .calendar-day.has-mood:hover {
-  transform: scale(1.05);
-  z-index: 10;
+  background: #e55a2b;
 }
 
 .calendar-day.today {
@@ -275,24 +378,24 @@
 }
 
 .day-number {
-  font-size: 14px;
-  color: #333;
-  font-weight: bold;
-  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+  color: inherit;
+  font-weight: 300;
   z-index: 5;
   position: absolute;
-  top: 4px;
-  left: 4px;
+  top: 8px;
+  left: 8px;
 }
 
 .mood-indicator {
   position: absolute;
-  bottom: 3px;
-  right: 3px;
+  bottom: 8px;
+  right: 8px;
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  border: 1px solid white;
+  background: white;
+  opacity: 0.8;
 }
 
 .mood-png {
@@ -300,29 +403,56 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   opacity: 1;
   pointer-events: none;
 }
 
 #backToMood {
-  display: block;
-  margin: 0 auto;
-  background: #333;
-  color: white;
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--page-stroke);
+  color: var(--page-bg);
   border: none;
   padding: 12px 24px;
   border-radius: 25px;
-  font-weight: bold;
-  font-size: 16px;
+  font-weight: 700;
+  font-size: 18px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+  text-transform: lowercase;
+  font-family: 'SF Pro Display', 'Helvetica Neue', 'Avenir Next', 'Segoe UI', 'Roboto', sans-serif;
+  letter-spacing: 0.5px;
 }
 
 #backToMood:hover {
-  background: #555;
-  transform: scale(1.05);
+  background: var(--page-text);
+  opacity: 0.8;
+}
+
+/* Toast Notification Styles */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--page-stroke);
+  color: var(--page-bg);
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 1000;
+  transform: translateX(100%);
+  transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+  opacity: 0;
+}
+
+.toast.show {
+  transform: translateX(0);
+  opacity: 1;
 }
 
 /* Mood Details Modal Styles */
@@ -373,6 +503,7 @@
   padding: 0;
   width: 20px;
   height: 20px;
+  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -606,19 +737,32 @@
     <div id="calendarView" style="display: none;">
       <div id="calendarHeader">
         <button id="prevMonth">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="15,18 9,12 15,6"></polyline>
           </svg>
         </button>
-        <h2 id="calendarMonth"></h2>
+        <div id="calendarMonthYear">
+          <span id="calendarMonthNumber"></span>
+          <span id="calendarYear"></span>
+        </div>
         <button id="nextMonth">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="9,18 15,12 9,6"></polyline>
           </svg>
         </button>
       </div>
-      <div id="calendarGrid"></div>
-      <button id="backToMood">Back to Mood</button>
+      
+      <div id="calendarContent">
+        <div id="calendarMonthName"></div>
+        <div id="calendarGrid"></div>
+      </div>
+      
+      <button id="backToMood">Back to moods</button>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+      <span id="toastMessage">mood entry submitted</span>
     </div>
     
     <!-- Mood Details Modal -->
@@ -735,6 +879,12 @@
     existingData[dateKey] = moodEntry;
     localStorage.setItem('moodData', JSON.stringify(existingData));
 
+    // Apply dynamic theme based on mood
+    applyMoodTheme(moodEntry.mood);
+
+    // Show toast notification
+    showToast('mood entry submitted');
+
     // Hide note input and navigate to calendar
     hideNoteInput();
     
@@ -743,6 +893,59 @@
     
     console.log('Saved mood entry:', moodEntry);
     console.log('All mood data:', existingData);
+  }
+
+  // Toast notification function
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
+    
+    toastMessage.textContent = message;
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3000);
+  }
+
+  // Dynamic theming function
+  function applyMoodTheme(moodName) {
+    const moodInfo = moodPaths[moodName];
+    if (moodInfo) {
+      // Update CSS variables
+      document.documentElement.style.setProperty('--page-bg', moodInfo.bg);
+      document.documentElement.style.setProperty('--page-text', moodInfo.color);
+      document.documentElement.style.setProperty('--page-stroke', moodInfo.color);
+      
+      // Store current theme in localStorage
+      localStorage.setItem('currentTheme', JSON.stringify({
+        bg: moodInfo.bg,
+        text: moodInfo.color,
+        stroke: moodInfo.color,
+        mood: moodName
+      }));
+      
+      // Force layout recalculation to fix positioning issues
+      setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+      }, 100);
+    }
+  }
+
+  // Load saved theme on page load
+  function loadSavedTheme() {
+    const savedTheme = localStorage.getItem('currentTheme');
+    if (savedTheme) {
+      const theme = JSON.parse(savedTheme);
+      document.documentElement.style.setProperty('--page-bg', theme.bg);
+      document.documentElement.style.setProperty('--page-text', theme.text);
+      document.documentElement.style.setProperty('--page-stroke', theme.stroke);
+      
+      // Force layout recalculation to fix positioning issues
+      setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+      }, 100);
+    }
   }
 
   // Event listeners for submission flow
@@ -835,7 +1038,13 @@
     // Update month header
     const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
                        "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
-    document.getElementById('calendarMonth').textContent = `${monthNames[month]} ${year}`;
+    const monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    
+    // Update new header elements
+    document.getElementById('calendarMonthNumber').textContent = String(month + 1).padStart(2, '0');
+    document.getElementById('calendarYear').textContent = year;
+    document.getElementById('calendarMonthName').textContent = monthNamesShort[month];
     
     // Clear calendar grid
     const grid = document.getElementById('calendarGrid');
@@ -846,12 +1055,7 @@
     dayHeaders.forEach(day => {
       const header = document.createElement('div');
       header.textContent = day;
-      header.style.gridColumn = 'span 1';
-      header.style.textAlign = 'center';
-      header.style.fontWeight = 'bold';
-      header.style.padding = '10px';
-      header.style.background = '#e9ecef';
-      header.style.borderRadius = '4px';
+      header.className = 'calendar-day-header';
       grid.appendChild(header);
     });
     
@@ -864,8 +1068,7 @@
     // Add empty cells for days before month starts
     for (let i = 0; i < startingDayOfWeek; i++) {
       const emptyDay = document.createElement('div');
-      emptyDay.className = 'calendar-day';
-      emptyDay.style.background = 'transparent';
+      emptyDay.className = 'calendar-day empty';
       grid.appendChild(emptyDay);
     }
     
@@ -894,10 +1097,12 @@
       if (moodData[dateKey]) {
         dayElement.classList.add('has-mood');
         
-        // Set background color and border to mood's colors
+        // Set background color to mood's color
         const moodInfo = moodPaths[moodData[dateKey].mood];
         dayElement.style.background = moodInfo.bg;
-        dayElement.style.border = `2px solid ${moodInfo.color}`;
+        
+        // Set day number color to mood's dot color
+        dayNumber.style.color = moodInfo.color;
         
         // Add mood PNG
         const moodPng = document.createElement('img');
@@ -909,7 +1114,6 @@
         // Add mood indicator (small colored dot)
         const indicator = document.createElement('div');
         indicator.className = 'mood-indicator';
-        indicator.style.background = moodInfo.color;
         dayElement.appendChild(indicator);
         
         // Add click handler to show mood details
@@ -1496,5 +1700,8 @@ window.addEventListener('resize', () => {
 
   
   // Background click removed - mood changes only via slider interaction
+  
+  // Load saved theme on page load
+  loadSavedTheme();
   </script>
 </html>
