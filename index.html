@@ -1510,18 +1510,22 @@
 
       const moodName = currentSharedMood.charAt(0).toUpperCase() + currentSharedMood.slice(1);
       const shareText = `I'm feeling ${moodName} today! 🎨`;
-      const gifUrl = `https://allanmacdonalddesign.github.io/mood-app/share-gifs/${currentSharedMood}-500x500.gif`;
       
-      // LinkedIn - Share the GIF directly
-      const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(gifUrl)}`;
+      // Different formats for different platforms
+      const gifUrl = `https://allanmacdonalddesign.github.io/mood-app/share-gifs/${currentSharedMood}-500x500.gif`;
+      const mp4Url = `https://allanmacdonalddesign.github.io/mood-app/share-mp4s/${currentSharedMood}-500x500.mp4`;
+      const optimizedGifUrl = `https://allanmacdonalddesign.github.io/mood-app/share-gifs-optimized/${currentSharedMood}-400x400.gif`;
+      
+      // LinkedIn - Share MP4 (works better than GIF)
+      const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(mp4Url)}`;
       document.getElementById('shareLinkedIn').href = linkedInUrl;
       
-      // Facebook - Share the GIF directly
+      // Facebook - Share the GIF directly (works well)
       const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(gifUrl)}`;
       document.getElementById('shareFacebook').href = facebookUrl;
       
-      // Twitter - Share the GIF directly with text
-      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(gifUrl)}`;
+      // Twitter - Share optimized GIF (smaller file size)
+      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(optimizedGifUrl)}`;
       document.getElementById('shareTwitter').href = twitterUrl;
     }
 
@@ -1540,10 +1544,27 @@
   function copyGifLink() {
     if (!currentSharedMood) return;
 
-    const gifUrl = `https://allanmacdonalddesign.github.io/mood-app/share-gifs/${currentSharedMood}-500x500.gif`;
+    // Show format options
+    const format = prompt('Choose format:\n1. GIF (500x500) - Best quality\n2. GIF (400x400) - Twitter optimized\n3. MP4 (500x500) - LinkedIn optimized\n\nEnter 1, 2, or 3:');
+    
+    let url;
+    switch(format) {
+      case '1':
+        url = `https://allanmacdonalddesign.github.io/mood-app/share-gifs/${currentSharedMood}-500x500.gif`;
+        break;
+      case '2':
+        url = `https://allanmacdonalddesign.github.io/mood-app/share-gifs-optimized/${currentSharedMood}-400x400.gif`;
+        break;
+      case '3':
+        url = `https://allanmacdonalddesign.github.io/mood-app/share-mp4s/${currentSharedMood}-500x500.mp4`;
+        break;
+      default:
+        // Default to high quality GIF
+        url = `https://allanmacdonalddesign.github.io/mood-app/share-gifs/${currentSharedMood}-500x500.gif`;
+    }
     
     // Copy to clipboard
-    navigator.clipboard.writeText(gifUrl).then(() => {
+    navigator.clipboard.writeText(url).then(() => {
       // Show feedback
       const button = document.getElementById('copyGifLink');
       const originalText = button.textContent;
@@ -1558,7 +1579,7 @@
       console.error('Failed to copy: ', err);
       // Fallback for older browsers
       const textArea = document.createElement('textarea');
-      textArea.value = gifUrl;
+      textArea.value = url;
       document.body.appendChild(textArea);
       textArea.select();
       document.execCommand('copy');
