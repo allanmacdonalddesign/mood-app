@@ -2,6 +2,20 @@
 <html>
 <head>
   <title>Mood Morph Slider</title>
+  
+  <!-- Open Graph meta tags for social media sharing -->
+  <meta property="og:title" content="Mood App - Track Your Daily Moods">
+  <meta property="og:description" content="A beautiful mood tracking app with animated expressions">
+  <meta property="og:image" content="">
+  <meta property="og:url" content="">
+  <meta property="og:type" content="website">
+  
+  <!-- Twitter Card meta tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mood App - Track Your Daily Moods">
+  <meta name="twitter:description" content="A beautiful mood tracking app with animated expressions">
+  <meta name="twitter:image" content="">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -1494,18 +1508,18 @@
 
       const moodName = currentSharedMood.charAt(0).toUpperCase() + currentSharedMood.slice(1);
       const shareText = `I'm feeling ${moodName} today! 🎨`;
-      const gifUrl = `${window.location.origin}/share-gifs/${currentSharedMood}-500x500.gif`;
+      const shareUrl = `${window.location.origin}/?mood=${currentSharedMood}&date=${currentSharedDate}&share=true`;
       
-      // LinkedIn - share the GIF directly
-      const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(gifUrl)}`;
+      // LinkedIn
+      const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
       document.getElementById('shareLinkedIn').href = linkedInUrl;
       
-      // Facebook - share the GIF directly
-      const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(gifUrl)}`;
+      // Facebook
+      const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
       document.getElementById('shareFacebook').href = facebookUrl;
       
-      // Twitter - share the GIF directly with text
-      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(gifUrl)}`;
+      // Twitter
+      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
       document.getElementById('shareTwitter').href = twitterUrl;
     }
 
@@ -1959,5 +1973,112 @@ window.addEventListener('resize', () => {
   
   // Load saved theme on page load
   loadSavedTheme();
+
+  // Handle share URL parameters
+  function handleShareUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const mood = urlParams.get('mood');
+    const date = urlParams.get('date');
+    const isShare = urlParams.get('share');
+    
+    if (mood && date && isShare) {
+      // Show the shared mood GIF
+      showSharedMood(mood, date);
+    }
+  }
+
+  function showSharedMood(mood, date) {
+    // Update meta tags for social media sharing
+    updateMetaTags(mood, date);
+    
+    // Hide all main content
+    document.getElementById('moodSelection').style.display = 'none';
+    document.getElementById('calendarView').style.display = 'none';
+    document.getElementById('moodDetailsFullScreen').style.display = 'none';
+    
+    // Create and show share view
+    const shareView = document.createElement('div');
+    shareView.id = 'shareView';
+    shareView.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--page-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      font-family: 'Gabarito', sans-serif;
+    `;
+    
+    const moodName = mood.charAt(0).toUpperCase() + mood.slice(1);
+    const formattedDate = new Date(date).toLocaleDateString('en-US', { 
+      month: 'long', 
+      day: 'numeric' 
+    }).toUpperCase();
+    
+    shareView.innerHTML = `
+      <div style="text-align: center; max-width: 600px; padding: 20px;">
+        <h1 style="font-size: 48px; font-weight: bold; color: var(--page-text); margin-bottom: 20px; font-family: 'Gabarito', sans-serif;">
+          I'm feeling ${moodName}!
+        </h1>
+        <div style="margin-bottom: 30px;">
+          <img src="share-gifs/${mood}-500x500.gif" alt="${moodName} mood" style="max-width: 400px; width: 100%; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        </div>
+        <p style="font-size: 24px; color: var(--page-text); margin-bottom: 30px; font-family: 'Gabarito', sans-serif;">
+          ${formattedDate}
+        </p>
+        <p style="font-size: 18px; color: var(--page-text); margin-bottom: 40px; font-family: 'Gabarito', sans-serif;">
+          Track your daily moods with our mood app!
+        </p>
+        <button onclick="window.location.href='${window.location.origin}'" style="
+          background: var(--page-stroke);
+          color: var(--page-bg);
+          border: none;
+          padding: 15px 30px;
+          border-radius: 25px;
+          font-size: 18px;
+          font-weight: 700;
+          cursor: pointer;
+          font-family: 'Gabarito', sans-serif;
+          transition: all 0.2s ease;
+        " onmouseover="this.style.background='var(--page-text)'" onmouseout="this.style.background='var(--page-stroke)'">
+          Try the Mood App
+        </button>
+      </div>
+    `;
+    
+    document.body.appendChild(shareView);
+    
+    // Apply mood theme
+    applyMoodTheme(mood);
+  }
+
+  function updateMetaTags(mood, date) {
+    const moodName = mood.charAt(0).toUpperCase() + mood.slice(1);
+    const formattedDate = new Date(date).toLocaleDateString('en-US', { 
+      month: 'long', 
+      day: 'numeric' 
+    }).toUpperCase();
+    const gifUrl = `${window.location.origin}/share-gifs/${mood}-500x500.gif`;
+    const shareUrl = window.location.href;
+    
+    // Update Open Graph tags
+    document.querySelector('meta[property="og:title"]').setAttribute('content', `I'm feeling ${moodName}! - ${formattedDate}`);
+    document.querySelector('meta[property="og:description"]').setAttribute('content', `Track your daily moods with our beautiful mood app!`);
+    document.querySelector('meta[property="og:image"]').setAttribute('content', gifUrl);
+    document.querySelector('meta[property="og:url"]').setAttribute('content', shareUrl);
+    
+    // Update Twitter Card tags
+    document.querySelector('meta[name="twitter:title"]').setAttribute('content', `I'm feeling ${moodName}! - ${formattedDate}`);
+    document.querySelector('meta[name="twitter:description"]').setAttribute('content', `Track your daily moods with our beautiful mood app!`);
+    document.querySelector('meta[name="twitter:image"]').setAttribute('content', gifUrl);
+  }
+
+  // Check for share URL on page load
+  handleShareUrl();
   </script>
 </html>
