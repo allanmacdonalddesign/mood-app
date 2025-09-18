@@ -1508,7 +1508,7 @@
 
       const moodName = currentSharedMood.charAt(0).toUpperCase() + currentSharedMood.slice(1);
       const shareText = `I'm feeling ${moodName} today! 🎨`;
-      const shareUrl = `${window.location.origin}/?mood=${currentSharedMood}&date=${currentSharedDate}&share=true`;
+      const shareUrl = `https://allanmacdonalddesign.github.io/mood-app/?mood=${currentSharedMood}&date=${currentSharedDate}&share=true`;
       
       // LinkedIn
       const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
@@ -2034,7 +2034,7 @@ window.addEventListener('resize', () => {
         <p style="font-size: 18px; color: var(--page-text); margin-bottom: 40px; font-family: 'Gabarito', sans-serif;">
           Track your daily moods with our mood app!
         </p>
-        <button onclick="window.location.href='${window.location.origin}'" style="
+        <button onclick="window.location.href='https://allanmacdonalddesign.github.io/mood-app/'" style="
           background: var(--page-stroke);
           color: var(--page-bg);
           border: none;
@@ -2063,7 +2063,7 @@ window.addEventListener('resize', () => {
       month: 'long', 
       day: 'numeric' 
     }).toUpperCase();
-    const gifUrl = `${window.location.origin}/share-gifs/${mood}-500x500.gif`;
+    const gifUrl = `https://allanmacdonalddesign.github.io/mood-app/share-gifs/${mood}-500x500.gif`;
     const shareUrl = window.location.href;
     
     // Update Open Graph tags
