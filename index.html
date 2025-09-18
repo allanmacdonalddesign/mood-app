@@ -437,21 +437,23 @@
 .toast {
   position: fixed;
   top: 20px;
-  right: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateX(100%);
   background: var(--page-stroke);
   color: var(--page-bg);
   padding: 12px 20px;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
+  font-family: 'Gabarito', sans-serif;
   z-index: 1000;
-  transform: translateX(100%);
   transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
   opacity: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .toast.show {
-  transform: translateX(0);
+  transform: translateX(-50%);
   opacity: 1;
 }
 
@@ -705,6 +707,151 @@
 .slider-dot.active {
   transform: scale(1.4);
 }
+
+/* Share Button Styles */
+#shareMoodButton {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: var(--page-stroke);
+  color: var(--page-bg);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+  text-transform: lowercase;
+  font-family: 'SF Pro Display', 'Helvetica Neue', 'Avenir Next', 'Segoe UI', 'Roboto', sans-serif;
+  letter-spacing: 0.5px;
+  z-index: 10;
+}
+
+#shareMoodButton:hover {
+  background: var(--page-text);
+  opacity: 0.8;
+}
+
+/* Share Modal Styles */
+#shareModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+#shareModalContent {
+  background: var(--page-bg);
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease;
+}
+
+#shareModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--page-stroke);
+  padding-bottom: 15px;
+  transition: border-color 0.3s ease;
+}
+
+#shareModalHeader h3 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--page-text);
+  transition: color 0.3s ease;
+  font-family: 'Gabarito', sans-serif;
+}
+
+#closeShareModal {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--page-text);
+  transition: color 0.3s ease;
+  padding: 5px;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#closeShareModal:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+#shareGifContainer {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+#shareGif {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 15px;
+  border: none;
+  outline: none;
+  display: block;
+}
+
+#shareOptions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.share-option {
+  background: var(--page-stroke);
+  color: var(--page-bg);
+  border: none;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'SF Pro Display', 'Helvetica Neue', 'Avenir Next', 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.share-option:hover {
+  background: var(--page-text);
+  opacity: 0.8;
+  transform: translateY(-2px);
+}
+
+#downloadGif {
+  grid-column: 1 / -1;
+  background: var(--page-text);
+  color: var(--page-bg);
+}
+
+#downloadGif:hover {
+  background: var(--page-stroke);
+}
   </style>
 </head>
 <body>
@@ -795,6 +942,30 @@
         <canvas id="moodCanvasFull"></canvas>
         <img id="moodLabelFull"/>
         <div id="moodDetailsFullNote"></div>
+        <button id="shareMoodButton">Share This Mood</button>
+      </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div id="shareModal" style="display: none;">
+      <div id="shareModalContent">
+                <div id="shareModalHeader">
+                  <h3>Share Your Mood</h3>
+                  <button id="closeShareModal">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+        <div id="shareGifContainer">
+          <img id="shareGif" src="" alt="Mood GIF" />
+        </div>
+        <div id="shareOptions">
+          <button id="downloadGif" class="share-option">Download GIF</button>
+          <a id="shareLinkedIn" class="share-option" target="_blank" rel="noopener">Share on LinkedIn</a>
+          <a id="shareFacebook" class="share-option" target="_blank" rel="noopener">Share on Facebook</a>
+          <a id="shareTwitter" class="share-option" target="_blank" rel="noopener">Share on Twitter</a>
+        </div>
       </div>
     </div>
   </body>
@@ -980,6 +1151,16 @@
       hideMoodDetailsFull();
     }
   });
+
+  // Event listeners for share functionality
+  document.getElementById('shareMoodButton').addEventListener('click', showShareModal);
+  document.getElementById('closeShareModal').addEventListener('click', hideShareModal);
+  document.getElementById('shareModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) {
+      hideShareModal();
+    }
+  });
+  document.getElementById('downloadGif').addEventListener('click', downloadGif);
   
   // Allow Enter key to confirm note (Ctrl+Enter or just Enter)
   document.getElementById('noteInput').addEventListener('keydown', (e) => {
@@ -1204,6 +1385,16 @@
   function showMoodDetails(dateKey, moodEntry) {
     const moodData = moodPaths[moodEntry.mood];
     
+    // Store current mood data for sharing
+    window.currentMoodData = {
+      mood: moodEntry.mood,
+      date: dateKey,
+      formattedDate: new Date(dateKey).toLocaleDateString('en-US', { 
+        month: 'long', 
+        day: 'numeric' 
+      }).toUpperCase()
+    };
+    
     // Format the date like "AUGUST 19"
     const date = new Date(dateKey);
     const formattedDate = date.toLocaleDateString('en-US', { 
@@ -1263,6 +1454,71 @@
     
     document.getElementById('moodDetailsFullScreen').style.display = 'none';
     document.getElementById('calendarView').style.display = 'block';
+  }
+
+  // Share functionality
+  let currentSharedMood = null;
+  let currentSharedDate = null;
+
+  function showShareModal() {
+    // Get the current mood and date from the day view
+    const moodData = getCurrentMoodData();
+    if (!moodData) return;
+
+    currentSharedMood = moodData.mood;
+    currentSharedDate = moodData.date;
+
+    // Set the GIF source (you'll need to create these GIFs)
+    const gifSrc = `share-gifs/${currentSharedMood}-500x500.gif`;
+    document.getElementById('shareGif').src = gifSrc;
+
+    // Update social media sharing links
+    updateSocialMediaLinks();
+
+    // Show the modal
+    document.getElementById('shareModal').style.display = 'flex';
+  }
+
+  function hideShareModal() {
+    document.getElementById('shareModal').style.display = 'none';
+  }
+
+  function getCurrentMoodData() {
+    // This function should return the current mood data from the day view
+    // We'll need to store this when the day view is opened
+    return window.currentMoodData || null;
+  }
+
+  function updateSocialMediaLinks() {
+    if (!currentSharedMood || !currentSharedDate) return;
+
+    const moodName = currentSharedMood.charAt(0).toUpperCase() + currentSharedMood.slice(1);
+    const shareText = `I'm feeling ${moodName} today! 🎨`;
+    const shareUrl = window.location.href;
+    
+    // LinkedIn
+    const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+    document.getElementById('shareLinkedIn').href = linkedInUrl;
+    
+    // Facebook
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+    document.getElementById('shareFacebook').href = facebookUrl;
+    
+    // Twitter
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+    document.getElementById('shareTwitter').href = twitterUrl;
+  }
+
+  function downloadGif() {
+    if (!currentSharedMood) return;
+
+    const gifSrc = `share-gifs/${currentSharedMood}-500x500.gif`;
+    const link = document.createElement('a');
+    link.href = gifSrc;
+    link.download = `mood-${currentSharedMood}-${currentSharedDate}.gif`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
   
   function changeMonth(direction) {
