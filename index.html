@@ -9,6 +9,7 @@
   <meta property="og:image" content="https://allanmacdonalddesign.github.io/mood-app/share-gifs/happy-500x500.gif">
   <meta property="og:url" content="https://allanmacdonalddesign.github.io/mood-app/">
   <meta property="og:type" content="website">
+  <meta property="og:video" content="">
   
   <!-- Twitter Card meta tags -->
   <meta name="twitter:card" content="summary_large_image">
@@ -1516,8 +1517,9 @@
       const mp4Url = `https://allanmacdonalddesign.github.io/mood-app/share-mp4s/${currentSharedMood}-500x500.mp4`;
       const optimizedGifUrl = `https://allanmacdonalddesign.github.io/mood-app/share-gifs-optimized/${currentSharedMood}-400x400.gif`;
       
-      // LinkedIn - Share MP4 (works better than GIF)
-      const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(mp4Url)}`;
+      // LinkedIn - Share a dedicated page that displays the MP4
+      const linkedInShareUrl = `https://allanmacdonalddesign.github.io/mood-app/?mood=${currentSharedMood}&date=${currentSharedDate}&share=linkedin`;
+      const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(linkedInShareUrl)}`;
       document.getElementById('shareLinkedIn').href = linkedInUrl;
       
       // Facebook - Share the GIF directly (works well)
@@ -2041,9 +2043,86 @@ window.addEventListener('resize', () => {
     const isShare = urlParams.get('share');
     
     if (mood && date && isShare) {
-      // Show the shared mood GIF
-      showSharedMood(mood, date);
+      // Show the shared mood content
+      if (isShare === 'linkedin') {
+        showLinkedInShare(mood, date);
+      } else {
+        showSharedMood(mood, date);
+      }
     }
+  }
+
+  function showLinkedInShare(mood, date) {
+    // Update meta tags for LinkedIn sharing
+    updateLinkedInMetaTags(mood, date);
+    
+    // Hide all main content
+    document.getElementById('moodSelection').style.display = 'none';
+    document.getElementById('calendarView').style.display = 'none';
+    document.getElementById('moodDetailsFullScreen').style.display = 'none';
+    
+    // Create and show LinkedIn share view
+    const shareView = document.createElement('div');
+    shareView.id = 'shareView';
+    shareView.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--page-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      font-family: 'Gabarito', sans-serif;
+    `;
+    
+    const moodName = mood.charAt(0).toUpperCase() + mood.slice(1);
+    const formattedDate = new Date(date).toLocaleDateString('en-US', { 
+      month: 'long', 
+      day: 'numeric' 
+    }).toUpperCase();
+    
+    shareView.innerHTML = `
+      <div style="text-align: center; max-width: 600px; padding: 20px;">
+        <h1 style="font-size: 48px; font-weight: bold; color: var(--page-text); margin-bottom: 20px; font-family: 'Gabarito', sans-serif;">
+          I'm feeling ${moodName}!
+        </h1>
+        <div style="margin-bottom: 30px;">
+          <video autoplay loop muted playsinline style="max-width: 400px; width: 100%; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+            <source src="share-mp4s/${mood}-500x500.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <p style="font-size: 24px; color: var(--page-text); margin-bottom: 30px; font-family: 'Gabarito', sans-serif;">
+          ${formattedDate}
+        </p>
+        <p style="font-size: 18px; color: var(--page-text); margin-bottom: 40px; font-family: 'Gabarito', sans-serif;">
+          Track your daily moods with our mood app!
+        </p>
+        <button onclick="window.location.href='https://allanmacdonalddesign.github.io/mood-app/'" style="
+          background: var(--page-stroke);
+          color: var(--page-bg);
+          border: none;
+          padding: 15px 30px;
+          border-radius: 25px;
+          font-size: 18px;
+          font-weight: 700;
+          cursor: pointer;
+          font-family: 'Gabarito', sans-serif;
+          transition: all 0.2s ease;
+        " onmouseover="this.style.background='var(--page-text)'" onmouseout="this.style.background='var(--page-stroke)'">
+          Try the Mood App
+        </button>
+      </div>
+    `;
+    
+    document.body.appendChild(shareView);
+    
+    // Apply mood theme
+    applyMoodTheme(mood);
   }
 
   function showSharedMood(mood, date) {
@@ -2114,6 +2193,32 @@ window.addEventListener('resize', () => {
     
     // Apply mood theme
     applyMoodTheme(mood);
+  }
+
+  function updateLinkedInMetaTags(mood, date) {
+    const moodName = mood.charAt(0).toUpperCase() + mood.slice(1);
+    const formattedDate = new Date(date).toLocaleDateString('en-US', { 
+      month: 'long', 
+      day: 'numeric' 
+    }).toUpperCase();
+    const mp4Url = `https://allanmacdonalddesign.github.io/mood-app/share-mp4s/${mood}-500x500.mp4`;
+    const shareUrl = window.location.href;
+    
+    // Update Open Graph tags for LinkedIn (using MP4 as image)
+    document.querySelector('meta[property="og:title"]').setAttribute('content', `I'm feeling ${moodName}! - ${formattedDate}`);
+    document.querySelector('meta[property="og:description"]').setAttribute('content', `Track your daily moods with our beautiful mood app!`);
+    document.querySelector('meta[property="og:image"]').setAttribute('content', mp4Url);
+    document.querySelector('meta[property="og:url"]').setAttribute('content', shareUrl);
+    document.querySelector('meta[property="og:type"]').setAttribute('content', 'video.other');
+    document.querySelector('meta[property="og:video"]').setAttribute('content', mp4Url);
+    
+    // Update Twitter Card tags
+    document.querySelector('meta[name="twitter:title"]').setAttribute('content', `I'm feeling ${moodName}! - ${formattedDate}`);
+    document.querySelector('meta[name="twitter:description"]').setAttribute('content', `Track your daily moods with our beautiful mood app!`);
+    document.querySelector('meta[name="twitter:image"]').setAttribute('content', mp4Url);
+    
+    // Also update the page title for better sharing
+    document.title = `I'm feeling ${moodName}! - Mood App`;
   }
 
   function updateMetaTags(mood, date) {
