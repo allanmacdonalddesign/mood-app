@@ -974,12 +974,13 @@
         <div id="shareGifContainer">
           <img id="shareGif" src="" alt="Mood GIF" />
         </div>
-        <div id="shareOptions">
-          <button id="downloadGif" class="share-option">Download GIF</button>
-          <a id="shareLinkedIn" class="share-option" target="_blank" rel="noopener">Share on LinkedIn</a>
-          <a id="shareFacebook" class="share-option" target="_blank" rel="noopener">Share on Facebook</a>
-          <a id="shareTwitter" class="share-option" target="_blank" rel="noopener">Share on Twitter</a>
-        </div>
+                <div id="shareOptions">
+                  <button id="downloadGif" class="share-option">Download GIF</button>
+                  <button id="copyGifLink" class="share-option">Copy GIF Link</button>
+                  <a id="shareLinkedIn" class="share-option" target="_blank" rel="noopener">Share on LinkedIn</a>
+                  <a id="shareFacebook" class="share-option" target="_blank" rel="noopener">Share on Facebook</a>
+                  <a id="shareTwitter" class="share-option" target="_blank" rel="noopener">Share on Twitter</a>
+                </div>
       </div>
     </div>
   </body>
@@ -1175,6 +1176,7 @@
     }
   });
   document.getElementById('downloadGif').addEventListener('click', downloadGif);
+  document.getElementById('copyGifLink').addEventListener('click', copyGifLink);
   
   // Allow Enter key to confirm note (Ctrl+Enter or just Enter)
   document.getElementById('noteInput').addEventListener('keydown', (e) => {
@@ -1533,6 +1535,42 @@
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  function copyGifLink() {
+    if (!currentSharedMood) return;
+
+    const gifUrl = `https://allanmacdonalddesign.github.io/mood-app/share-gifs/${currentSharedMood}-500x500.gif`;
+    
+    // Copy to clipboard
+    navigator.clipboard.writeText(gifUrl).then(() => {
+      // Show feedback
+      const button = document.getElementById('copyGifLink');
+      const originalText = button.textContent;
+      button.textContent = 'Copied!';
+      button.style.background = '#4CAF50';
+      
+      setTimeout(() => {
+        button.textContent = originalText;
+        button.style.background = '';
+      }, 2000);
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = gifUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      
+      const button = document.getElementById('copyGifLink');
+      const originalText = button.textContent;
+      button.textContent = 'Copied!';
+      setTimeout(() => {
+        button.textContent = originalText;
+      }, 2000);
+    });
   }
   
   function changeMonth(direction) {
@@ -2076,6 +2114,9 @@ window.addEventListener('resize', () => {
     document.querySelector('meta[name="twitter:title"]').setAttribute('content', `I'm feeling ${moodName}! - ${formattedDate}`);
     document.querySelector('meta[name="twitter:description"]').setAttribute('content', `Track your daily moods with our beautiful mood app!`);
     document.querySelector('meta[name="twitter:image"]').setAttribute('content', gifUrl);
+    
+    // Also update the page title for better sharing
+    document.title = `I'm feeling ${moodName}! - Mood App`;
   }
 
   // Check for share URL on page load
