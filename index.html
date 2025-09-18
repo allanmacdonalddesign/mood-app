@@ -1510,18 +1510,18 @@
 
       const moodName = currentSharedMood.charAt(0).toUpperCase() + currentSharedMood.slice(1);
       const shareText = `I'm feeling ${moodName} today! 🎨`;
-      const shareUrl = `https://allanmacdonalddesign.github.io/mood-app/?mood=${currentSharedMood}&date=${currentSharedDate}&share=true`;
+      const gifUrl = `https://allanmacdonalddesign.github.io/mood-app/share-gifs/${currentSharedMood}-500x500.gif`;
       
-      // LinkedIn
-      const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+      // LinkedIn - Share the GIF directly
+      const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(gifUrl)}`;
       document.getElementById('shareLinkedIn').href = linkedInUrl;
       
-      // Facebook
-      const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+      // Facebook - Share the GIF directly
+      const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(gifUrl)}`;
       document.getElementById('shareFacebook').href = facebookUrl;
       
-      // Twitter
-      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+      // Twitter - Share the GIF directly with text
+      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(gifUrl)}`;
       document.getElementById('shareTwitter').href = twitterUrl;
     }
 
