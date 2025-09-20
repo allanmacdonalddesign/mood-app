@@ -190,6 +190,13 @@
   z-index: 101;
 }
 
+/* Mobile-specific positioning for confirm button */
+@media (max-width: 768px) {
+  #confirmButton {
+    bottom: 80px;
+  }
+}
+
 #confirmButton:hover {
   background: #333;
   color: white;
@@ -701,6 +708,13 @@
   text-align: center;
   padding: 15px 20px;
   z-index: 10;
+}
+
+/* Mobile-specific positioning for day view */
+@media (max-width: 768px) {
+  #moodDetailsFullNote {
+    bottom: 20%;
+  }
 }
 
 .slider-dot {
