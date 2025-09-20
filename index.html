@@ -28,7 +28,7 @@
       --page-stroke: #333;
     }
 
-    html, body {
+      html, body {
     margin: 0;
     padding: 0;
     height: 100%;
@@ -42,7 +42,7 @@
     width: 100%;
     height: 100%;
     background: var(--page-bg);
-    transition: background-color 0.5s ease; /* 👈 This is the magic */
+  transition: background-color 0.5s ease; /* 👈 This is the magic */
   }
 
   canvas {
@@ -64,8 +64,8 @@
     #moodLabel {
       bottom: 21%;
     }
-  }
-  #moodSlider {
+}
+#moodSlider {
   position: absolute;
   bottom: 21%;
   width: 100%;
@@ -714,6 +714,73 @@
 @media (max-width: 768px) {
   #moodDetailsFullNote {
     bottom: 20%;
+  }
+}
+
+/* Mobile-specific calendar styling */
+@media (max-width: 768px) {
+  #calendarView {
+    padding: 20px 10px;
+  }
+  
+  #calendarHeader {
+    margin-bottom: 30px;
+  }
+  
+  #calendarMonthNumber {
+    font-size: 48px;
+    margin-bottom: 10px;
+  }
+  
+  #calendarYear {
+    font-size: 24px;
+  }
+  
+  #calendarMonthName {
+    font-size: 32px;
+    position: static;
+    transform: none;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  #calendarGrid {
+    max-width: 100%;
+    gap: 8px;
+    padding: 20px;
+  }
+  
+  .calendar-day-header {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px 4px;
+  }
+  
+  .calendar-day {
+    min-height: 50px;
+    font-size: 16px;
+    padding: 8px;
+  }
+  
+  .calendar-day.has-mood {
+    position: relative;
+  }
+  
+  .calendar-day.has-mood .mood-face {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .calendar-day.has-mood .day-number {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    font-size: 12px;
+    font-weight: bold;
   }
 }
 
@@ -1740,16 +1807,16 @@ function loadMoodFace(elementId, moodName) {
     // Use WebM for supported browsers
     if (faceVid) {
       fetch(webmPath).then(res => {
-        if (res.ok) {
+  if (res.ok) {
           faceVid.src = webmPath;
-          faceVid.style.display = 'block';
+    faceVid.style.display = 'block';
           // Hide APNG if it exists
           const apngImg = document.getElementById(elementId + 'Apng');
           if (apngImg) apngImg.style.display = 'none';
-        } else {
-          faceVid.style.display = 'none';
-        }
-      });
+  } else {
+    faceVid.style.display = 'none';
+  }
+});
     }
   }
 }
@@ -1906,7 +1973,7 @@ function morphTo(nextIndex, duration = 400) {
   // Change background + text + button colors immediately
   document.getElementById('background').style.background = moodPaths[nextMood].bg;
   document.getElementById('moodLabel').src = `emotions-text/${moods[nextIndex].toUpperCase()}.png`;
-  
+
   // Update button colors immediately with background
   const moodData = moodPaths[nextMood];
   
