@@ -737,29 +737,39 @@
   }
   
   #calendarMonthName {
+    display: none; /* Hide the side month name on mobile */
+  }
+  
+  /* Add mobile-specific month name above calendar */
+  #calendarContent::before {
+    content: attr(data-month-name);
+    display: block;
     font-size: 32px;
-    position: static;
-    transform: none;
+    font-weight: bold;
+    color: var(--page-text);
     text-align: center;
     margin-bottom: 20px;
   }
   
   #calendarGrid {
     max-width: 100%;
-    gap: 8px;
-    padding: 20px;
+    gap: 4px;
+    padding: 10px;
+    border: 1px solid var(--page-stroke);
   }
   
   .calendar-day-header {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
-    padding: 8px 4px;
+    padding: 6px 2px;
+    border-bottom: 1px solid var(--page-stroke);
   }
   
   .calendar-day {
-    min-height: 50px;
-    font-size: 16px;
-    padding: 8px;
+    min-height: 40px;
+    font-size: 14px;
+    padding: 4px;
+    border: 1px solid var(--page-stroke);
   }
   
   .calendar-day.has-mood {
@@ -1344,6 +1354,9 @@
     document.getElementById('calendarMonthNumber').textContent = String(month + 1).padStart(2, '0');
     document.getElementById('calendarYear').textContent = year;
     document.getElementById('calendarMonthName').textContent = monthNamesShort[month];
+    
+    // Set data attribute for mobile month name
+    document.getElementById('calendarContent').setAttribute('data-month-name', monthNamesShort[month]);
     
     // Clear calendar grid
     const grid = document.getElementById('calendarGrid');
