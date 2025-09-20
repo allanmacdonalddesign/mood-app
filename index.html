@@ -52,15 +52,22 @@
   }
   #moodLabel {
   position: absolute;
-  bottom: 21%;
+  bottom: 10%;
   left: 50%;
   transform: translateX(-50%);
   width: min(300px);
   pointer-events: none;
 }
+
+  /* Mobile-specific positioning */
+  @media (max-width: 768px) {
+    #moodLabel {
+      bottom: 21%;
+    }
+  }
   #moodSlider {
   position: absolute;
-  bottom: 33%;
+  bottom: 21%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -69,6 +76,13 @@
   pointer-events: auto;
   z-index: 5;
 }
+
+  /* Mobile-specific positioning */
+  @media (max-width: 768px) {
+    #moodSlider {
+      bottom: 33%;
+    }
+  }
 
 #dateDisplay {
   position: absolute;
@@ -97,7 +111,7 @@
 
 #submitButton {
   position: absolute;
-  bottom: 12%;
+  bottom: 2%;
   left: 50%;
   transform: translateX(-50%);
   background: transparent;
@@ -111,6 +125,13 @@
   transition: transform 0.1s ease, opacity 0.1s ease, border-color 0.3s ease, color 0.3s ease;
   pointer-events: auto;
   z-index: 10;
+}
+
+/* Mobile-specific positioning */
+@media (max-width: 768px) {
+  #submitButton {
+    bottom: 12%;
+  }
 }
 
 #submitButton:hover {
