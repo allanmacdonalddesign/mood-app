@@ -1668,6 +1668,12 @@
     });
   };
 
+// Helper function to detect Safari (mobile and desktop)
+function isSafari() {
+  const ua = navigator.userAgent;
+  return /Safari/.test(ua) && !/Chrome|CriOS|FxiOS|Edge|Edg/.test(ua);
+}
+
 // Helper function to detect mobile Safari
 function isMobileSafari() {
   const ua = navigator.userAgent;
@@ -1681,10 +1687,11 @@ function loadMoodFace(elementId, moodName) {
   const apngPath = `apngs/${moodName}.apng`;
   
   console.log('Loading mood face:', elementId, moodName);
+  console.log('Is Safari:', isSafari());
   console.log('Is mobile Safari:', isMobileSafari());
   
-  // Check if we're on mobile Safari or if WebM is not supported
-  if (isMobileSafari() || (faceVid && !faceVid.canPlayType('video/webm; codecs="vp8, vorbis"'))) {
+  // Check if we're on Safari (any Safari) or if WebM is not supported
+  if (isSafari() || (faceVid && !faceVid.canPlayType('video/webm; codecs="vp8, vorbis"'))) {
     console.log('Using APNG fallback for:', moodName);
     // Use APNG fallback for mobile Safari
     if (faceVid) faceVid.style.display = 'none';
