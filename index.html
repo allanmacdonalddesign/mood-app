@@ -1434,16 +1434,7 @@
     document.getElementById('moodLabelFull').src = moodData.moodlabel;
     
     // Update face video
-    const faceVid = document.getElementById('moodFaceFull');
-    const facePath = `faces/${moodEntry.mood}.webm`;
-    fetch(facePath).then(res => {
-      if (res.ok) {
-        faceVid.src = facePath;
-        faceVid.style.display = 'block';
-      } else {
-        faceVid.style.display = 'none';
-      }
-    });
+    loadMoodFace('moodFaceFull', moodEntry.mood);
     
     // Update note
     const noteElement = document.getElementById('moodDetailsFullNote');
@@ -1656,17 +1647,56 @@
     });
   };
 
-// Update face video
-const faceVid = document.getElementById('moodFace');
-const facePath = `faces/${moods[currentIndex]}.webm`;
-fetch(facePath).then(res => {
-  if (res.ok) {
-    faceVid.src = facePath;
-    faceVid.style.display = 'block';
-  } else {
+// Helper function to detect mobile Safari
+function isMobileSafari() {
+  const ua = navigator.userAgent;
+  return /iPad|iPhone|iPod/.test(ua) && /Safari/.test(ua) && !/Chrome|CriOS|FxiOS/.test(ua);
+}
+
+// Helper function to load mood face with fallback
+function loadMoodFace(elementId, moodName) {
+  const faceVid = document.getElementById(elementId);
+  const webmPath = `faces/${moodName}.webm`;
+  const apngPath = `apngs/${moodName}.apng`;
+  
+  // Check if we're on mobile Safari or if WebM is not supported
+  if (isMobileSafari() || !faceVid.canPlayType('video/webm; codecs="vp8, vorbis"')) {
+    // Use APNG fallback for mobile Safari
     faceVid.style.display = 'none';
+    // Create or update APNG image element
+    let apngImg = document.getElementById(elementId + 'Apng');
+    if (!apngImg) {
+      apngImg = document.createElement('img');
+      apngImg.id = elementId + 'Apng';
+      apngImg.style.position = 'absolute';
+      apngImg.style.top = '50%';
+      apngImg.style.left = '50%';
+      apngImg.style.transform = 'translate(-50%, -50%)';
+      apngImg.style.width = '200px';
+      apngImg.style.height = '200px';
+      apngImg.style.objectFit = 'contain';
+      faceVid.parentNode.appendChild(apngImg);
+    }
+    apngImg.src = apngPath;
+    apngImg.style.display = 'block';
+  } else {
+    // Use WebM for supported browsers
+    fetch(webmPath).then(res => {
+      if (res.ok) {
+        faceVid.src = webmPath;
+        faceVid.style.display = 'block';
+        // Hide APNG if it exists
+        const apngImg = document.getElementById(elementId + 'Apng');
+        if (apngImg) apngImg.style.display = 'none';
+      } else {
+        faceVid.style.display = 'none';
+      }
+    });
   }
-});
+}
+
+// Update face video
+loadMoodFace('moodFace', moods[currentIndex]);
 
 
   
@@ -1837,15 +1867,7 @@ function morphTo(nextIndex, duration = 400) {
   }
 
 
-  const facePath = `faces/${moods[nextIndex]}.webm`;
-fetch(facePath).then(res => {
-  if (res.ok) {
-    faceVid.src = facePath;
-    faceVid.style.display = 'block';
-  } else {
-    faceVid.style.display = 'none';
-  }
-});
+  loadMoodFace('moodFace', moods[nextIndex]);
 
   const interval = setInterval(() => {
     for (let i = 0; i < fromSegs.length; i++) {
