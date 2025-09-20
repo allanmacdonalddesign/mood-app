@@ -1659,10 +1659,15 @@ function loadMoodFace(elementId, moodName) {
   const webmPath = `faces/${moodName}.webm`;
   const apngPath = `apngs/${moodName}.apng`;
   
+  console.log('Loading mood face:', elementId, moodName);
+  console.log('Is mobile Safari:', isMobileSafari());
+  
   // Check if we're on mobile Safari or if WebM is not supported
-  if (isMobileSafari() || !faceVid.canPlayType('video/webm; codecs="vp8, vorbis"')) {
+  if (isMobileSafari() || (faceVid && !faceVid.canPlayType('video/webm; codecs="vp8, vorbis"'))) {
+    console.log('Using APNG fallback for:', moodName);
     // Use APNG fallback for mobile Safari
-    faceVid.style.display = 'none';
+    if (faceVid) faceVid.style.display = 'none';
+    
     // Create or update APNG image element
     let apngImg = document.getElementById(elementId + 'Apng');
     if (!apngImg) {
@@ -1675,23 +1680,35 @@ function loadMoodFace(elementId, moodName) {
       apngImg.style.width = '200px';
       apngImg.style.height = '200px';
       apngImg.style.objectFit = 'contain';
-      faceVid.parentNode.appendChild(apngImg);
+      apngImg.style.zIndex = '10';
+      
+      // Find the background element to append to
+      const background = document.getElementById('background');
+      if (background) {
+        background.appendChild(apngImg);
+      } else if (faceVid && faceVid.parentNode) {
+        faceVid.parentNode.appendChild(apngImg);
+      }
     }
     apngImg.src = apngPath;
     apngImg.style.display = 'block';
+    console.log('APNG element created/updated:', apngImg);
   } else {
+    console.log('Using WebM for:', moodName);
     // Use WebM for supported browsers
-    fetch(webmPath).then(res => {
-      if (res.ok) {
-        faceVid.src = webmPath;
-        faceVid.style.display = 'block';
-        // Hide APNG if it exists
-        const apngImg = document.getElementById(elementId + 'Apng');
-        if (apngImg) apngImg.style.display = 'none';
-      } else {
-        faceVid.style.display = 'none';
-      }
-    });
+    if (faceVid) {
+      fetch(webmPath).then(res => {
+        if (res.ok) {
+          faceVid.src = webmPath;
+          faceVid.style.display = 'block';
+          // Hide APNG if it exists
+          const apngImg = document.getElementById(elementId + 'Apng');
+          if (apngImg) apngImg.style.display = 'none';
+        } else {
+          faceVid.style.display = 'none';
+        }
+      });
+    }
   }
 }
 
