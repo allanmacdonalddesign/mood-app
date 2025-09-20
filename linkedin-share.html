@@ -159,6 +159,10 @@
     // Update content on page load
     updatePageContent();
     
+    // Debug: Log the mood and date for troubleshooting
+    console.log('LinkedIn Share Page - Mood:', mood, 'Date:', date);
+    console.log('Updated meta tags for mood:', mood);
+    
     // Auto-play the video when the page loads
     setTimeout(() => {
       const video = document.getElementById('moodVideo');
