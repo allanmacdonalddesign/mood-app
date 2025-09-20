@@ -1527,8 +1527,9 @@
       const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(gifUrl)}`;
       document.getElementById('shareFacebook').href = facebookUrl;
       
-      // Twitter - Share optimized GIF (smaller file size)
-      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(optimizedGifUrl)}`;
+      // Twitter - Share a webpage that displays the GIF
+      const twitterShareUrl = `https://allanmacdonalddesign.github.io/mood-app/?mood=${currentSharedMood}&date=${currentSharedDate}&share=twitter`;
+      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(twitterShareUrl)}`;
       document.getElementById('shareTwitter').href = twitterUrl;
     }
 
@@ -2047,10 +2048,82 @@ window.addEventListener('resize', () => {
       // Show the shared mood content
       if (isShare === 'linkedin') {
         showLinkedInShare(mood, date);
+      } else if (isShare === 'twitter') {
+        showTwitterShare(mood, date);
       } else {
         showSharedMood(mood, date);
       }
     }
+  }
+
+  function showTwitterShare(mood, date) {
+    // Update meta tags for Twitter sharing
+    updateTwitterMetaTags(mood, date);
+    
+    // Hide all main content
+    document.getElementById('moodSelection').style.display = 'none';
+    document.getElementById('calendarView').style.display = 'none';
+    document.getElementById('moodDetailsFullScreen').style.display = 'none';
+    
+    // Create and show Twitter share view
+    const shareView = document.createElement('div');
+    shareView.id = 'shareView';
+    shareView.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--page-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      font-family: 'Gabarito', sans-serif;
+    `;
+    
+    const moodName = mood.charAt(0).toUpperCase() + mood.slice(1);
+    const formattedDate = new Date(date).toLocaleDateString('en-US', { 
+      month: 'long', 
+      day: 'numeric' 
+    }).toUpperCase();
+    
+    shareView.innerHTML = `
+      <div style="text-align: center; max-width: 600px; padding: 20px;">
+        <h1 style="font-size: 48px; font-weight: bold; color: var(--page-text); margin-bottom: 20px; font-family: 'Gabarito', sans-serif;">
+          I'm feeling ${moodName}!
+        </h1>
+        <div style="margin-bottom: 30px;">
+          <img src="share-gifs-optimized/${mood}-400x400.gif" alt="${moodName} mood" style="max-width: 400px; width: 100%; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+        </div>
+        <p style="font-size: 24px; color: var(--page-text); margin-bottom: 30px; font-family: 'Gabarito', sans-serif;">
+          ${formattedDate}
+        </p>
+        <p style="font-size: 18px; color: var(--page-text); margin-bottom: 40px; font-family: 'Gabarito', sans-serif;">
+          Track your daily moods with our mood app!
+        </p>
+        <button onclick="window.location.href='https://allanmacdonalddesign.github.io/mood-app/'" style="
+          background: var(--page-stroke);
+          color: var(--page-bg);
+          border: none;
+          padding: 15px 30px;
+          border-radius: 25px;
+          font-size: 18px;
+          font-weight: 700;
+          cursor: pointer;
+          font-family: 'Gabarito', sans-serif;
+          transition: all 0.2s ease;
+        " onmouseover="this.style.background='var(--page-text)'" onmouseout="this.style.background='var(--page-stroke)'">
+          Try the Mood App
+        </button>
+      </div>
+    `;
+    
+    document.body.appendChild(shareView);
+    
+    // Apply mood theme
+    applyMoodTheme(mood);
   }
 
   function showLinkedInShare(mood, date) {
@@ -2211,6 +2284,31 @@ window.addEventListener('resize', () => {
     
     // Apply mood theme
     applyMoodTheme(mood);
+  }
+
+  function updateTwitterMetaTags(mood, date) {
+    const moodName = mood.charAt(0).toUpperCase() + mood.slice(1);
+    const formattedDate = new Date(date).toLocaleDateString('en-US', { 
+      month: 'long', 
+      day: 'numeric' 
+    }).toUpperCase();
+    const gifUrl = `https://allanmacdonalddesign.github.io/mood-app/share-gifs-optimized/${mood}-400x400.gif`;
+    const shareUrl = window.location.href;
+    
+    // Update Open Graph tags for Twitter
+    document.querySelector('meta[property="og:title"]').setAttribute('content', `I'm feeling ${moodName}! - ${formattedDate}`);
+    document.querySelector('meta[property="og:description"]').setAttribute('content', `Track your daily moods with our beautiful mood app!`);
+    document.querySelector('meta[property="og:image"]').setAttribute('content', gifUrl);
+    document.querySelector('meta[property="og:url"]').setAttribute('content', shareUrl);
+    document.querySelector('meta[property="og:type"]').setAttribute('content', 'website');
+    
+    // Update Twitter Card tags
+    document.querySelector('meta[name="twitter:title"]').setAttribute('content', `I'm feeling ${moodName}! - ${formattedDate}`);
+    document.querySelector('meta[name="twitter:description"]').setAttribute('content', `Track your daily moods with our beautiful mood app!`);
+    document.querySelector('meta[name="twitter:image"]').setAttribute('content', gifUrl);
+    
+    // Also update the page title for better sharing
+    document.title = `I'm feeling ${moodName}! - Mood App`;
   }
 
   function updateLinkedInMetaTags(mood, date) {
