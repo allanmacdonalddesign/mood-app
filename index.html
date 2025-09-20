@@ -1527,10 +1527,9 @@
       const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(gifUrl)}`;
       document.getElementById('shareFacebook').href = facebookUrl;
       
-      // Twitter - Share a webpage that displays the GIF
-      const twitterShareUrl = `https://allanmacdonalddesign.github.io/mood-app/?mood=${currentSharedMood}&date=${currentSharedDate}&share=twitter`;
-      // Try sharing just the URL without text to see if that helps with preview
-      const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(twitterShareUrl)}`;
+      // Twitter - Share a dedicated page with proper meta tags
+      const twitterShareUrl = `https://allanmacdonalddesign.github.io/mood-app/twitter-share.html?mood=${currentSharedMood}&date=${currentSharedDate}`;
+      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(twitterShareUrl)}`;
       document.getElementById('shareTwitter').href = twitterUrl;
       
       // Debug: Log the Twitter URL to console
