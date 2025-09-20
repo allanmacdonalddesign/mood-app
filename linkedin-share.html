@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mood App - Track Your Daily Moods</title>
+  
+  <!-- Open Graph meta tags for LinkedIn sharing -->
+  <meta property="og:title" content="I'm feeling Happy! - SEPTEMBER 18">
+  <meta property="og:description" content="Track your daily moods with our beautiful mood app! Click to see the animated mood video.">
+  <meta property="og:image" content="https://allanmacdonalddesign.github.io/mood-app/share-gifs/happy-500x500.gif">
+  <meta property="og:url" content="https://allanmacdonalddesign.github.io/mood-app/">
+  <meta property="og:type" content="website">
+  <meta property="og:video" content="https://allanmacdonalddesign.github.io/mood-app/share-mp4s/happy-500x500.mp4">
+  
+  <!-- Twitter Card meta tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="I'm feeling Happy! - SEPTEMBER 18">
+  <meta name="twitter:description" content="Track your daily moods with our beautiful mood app!">
+  <meta name="twitter:image" content="https://allanmacdonalddesign.github.io/mood-app/share-gifs/happy-500x500.gif">
+  
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Gabarito', sans-serif;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    
+    .container {
+      text-align: center;
+      max-width: 600px;
+      padding: 20px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    
+    h1 {
+      font-size: 48px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    
+    .video-container {
+      margin-bottom: 30px;
+      position: relative;
+    }
+    
+    video {
+      max-width: 400px;
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    
+    .play-indicator {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 12px;
+    }
+    
+    .date {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 30px;
+    }
+    
+    .description {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 40px;
+    }
+    
+    .button {
+      background: #333;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 25px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.2s ease;
+    }
+    
+    .button:hover {
+      background: #555;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>I'm feeling Happy!</h1>
+    <div class="video-container">
+      <video 
+        id="moodVideo"
+        controls 
+        playsinline 
+        onended="this.currentTime = 0; this.play();"
+      >
+        <source src="share-mp4s/happy-500x500.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="play-indicator">Click to play & loop</div>
+    </div>
+    <p class="date">SEPTEMBER 18</p>
+    <p class="description">Track your daily moods with our mood app!</p>
+    <a href="https://allanmacdonalddesign.github.io/mood-app/" class="button">Try the Mood App</a>
+  </div>
+  
+  <script>
+    // Get mood and date from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const mood = urlParams.get('mood') || 'happy';
+    const date = urlParams.get('date') || '2025-09-18';
+    
+    // Update the page content based on the mood
+    function updatePageContent() {
+      const moodName = mood.charAt(0).toUpperCase() + mood.slice(1);
+      const formattedDate = new Date(date).toLocaleDateString('en-US', { 
+        month: 'long', 
+        day: 'numeric' 
+      }).toUpperCase();
+      
+      // Update title and meta tags
+      document.title = `I'm feeling ${moodName}! - Mood App`;
+      document.querySelector('h1').textContent = `I'm feeling ${moodName}!`;
+      document.querySelector('.date').textContent = formattedDate;
+      
+      // Update video source
+      const video = document.getElementById('moodVideo');
+      const source = video.querySelector('source');
+      source.src = `share-mp4s/${mood}-500x500.mp4`;
+      video.load();
+      
+      // Update meta tags
+      const gifUrl = `https://allanmacdonalddesign.github.io/mood-app/share-gifs/${mood}-500x500.gif`;
+      const mp4Url = `https://allanmacdonalddesign.github.io/mood-app/share-mp4s/${mood}-500x500.mp4`;
+      
+      document.querySelector('meta[property="og:title"]').setAttribute('content', `I'm feeling ${moodName}! - ${formattedDate}`);
+      document.querySelector('meta[property="og:image"]').setAttribute('content', gifUrl);
+      document.querySelector('meta[property="og:video"]').setAttribute('content', mp4Url);
+      document.querySelector('meta[name="twitter:title"]').setAttribute('content', `I'm feeling ${moodName}! - ${formattedDate}`);
+      document.querySelector('meta[name="twitter:image"]').setAttribute('content', gifUrl);
+    }
+    
+    // Update content on page load
+    updatePageContent();
+    
+    // Auto-play the video when the page loads
+    setTimeout(() => {
+      const video = document.getElementById('moodVideo');
+      if (video) {
+        video.play().catch(e => console.log('Autoplay prevented:', e));
+      }
+    }, 500);
+  </script>
+</body>
+</html>
