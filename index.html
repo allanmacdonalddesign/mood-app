@@ -1527,8 +1527,8 @@
       const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(gifUrl)}`;
       document.getElementById('shareFacebook').href = facebookUrl;
       
-      // Twitter - Share a dedicated page with proper meta tags
-      const twitterShareUrl = `https://allanmacdonalddesign.github.io/mood-app/twitter-share.html?mood=${currentSharedMood}&date=${currentSharedDate}`;
+      // Twitter - Share a dedicated mood-specific page with proper meta tags
+      const twitterShareUrl = `https://allanmacdonalddesign.github.io/mood-app/twitter-shares/twitter-${currentSharedMood}.html`;
       const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(twitterShareUrl)}`;
       document.getElementById('shareTwitter').href = twitterUrl;
       
