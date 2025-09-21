@@ -528,7 +528,7 @@
   
   #shareMoodButton {
     position: absolute !important;
-    bottom: 40px !important;
+    bottom: 80px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
     z-index: 10 !important;
@@ -2018,10 +2018,15 @@ function loadMoodFace(elementId, moodName) {
       apngImg.style.top = '50%';
       apngImg.style.left = '50%';
       apngImg.style.transform = 'translate(-50%, -50%)';
-      // Use mobile-specific size if on mobile
+      // Use mobile-specific size and positioning if on mobile
       const isMobile = window.innerWidth <= 768;
       apngImg.style.width = isMobile ? '120px' : '200px';
       apngImg.style.height = isMobile ? '120px' : '200px';
+      
+      // For day view on mobile, position higher
+      if (isMobile && elementId === 'moodFaceFull') {
+        apngImg.style.top = '40%';
+      }
       apngImg.style.objectFit = 'contain';
       apngImg.style.zIndex = '10';
       
@@ -2033,6 +2038,7 @@ function loadMoodFace(elementId, moodName) {
         faceVid.parentNode.appendChild(apngImg);
       }
     }
+    console.log('Setting APNG src to:', apngPath);
     apngImg.src = apngPath;
     apngImg.style.display = 'block';
     console.log('APNG element created/updated:', apngImg);
