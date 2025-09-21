@@ -736,10 +736,20 @@
 
 /* Mobile-specific calendar styling */
 @media (max-width: 768px) {
+  #mobileTest {
+    display: block !important;
+  }
+  
   #calendarView {
     padding: 15px 5px;
     width: 100%;
     box-sizing: border-box;
+  }
+  
+  #calendarContent {
+    padding: 0 5px !important;
+    max-width: 100% !important;
+    gap: 0px !important;
   }
   
   #calendarHeader {
@@ -759,6 +769,11 @@
     display: none !important; /* Force hide the side month name on mobile */
     visibility: hidden !important;
     opacity: 0 !important;
+    position: static !important;
+    transform: none !important;
+    left: auto !important;
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
   }
   
   /* Show mobile-specific month name above calendar */
@@ -778,14 +793,15 @@
   }
   
   #calendarGrid {
-    max-width: 100%;
-    gap: 1px;
-    padding: 3px;
-    border: 1px solid var(--page-stroke);
-    width: 100%;
-    box-sizing: border-box;
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    max-width: 100% !important;
+    gap: 1px !important;
+    padding: 3px !important;
+    border: 1px solid var(--page-stroke) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    display: grid !important;
+    grid-template-columns: repeat(7, 1fr) !important;
+    background: var(--page-stroke) !important;
   }
   
   .calendar-day-header {
@@ -1048,6 +1064,7 @@
     <!-- Calendar view -->
     <div id="calendarView" style="display: none;">
       <div style="text-align: center; color: red; font-weight: bold; padding: 10px;">TEST VERSION 2.0 - MOBILE FIX</div>
+      <div id="mobileTest" style="display: none; text-align: center; color: blue; font-weight: bold; padding: 5px;">MOBILE CSS IS WORKING</div>
       <div id="calendarHeader">
         <button id="prevMonth">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
