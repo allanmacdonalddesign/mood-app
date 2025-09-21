@@ -511,6 +511,17 @@
     top: 35% !important;
   }
   
+  /* Ensure APNG fallback images are properly positioned on mobile */
+  #moodFaceApng, #moodFaceFullApng {
+    width: 120px !important;
+    height: 120px !important;
+    position: absolute !important;
+    top: 35% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 10 !important;
+  }
+  
   /* Day view specific mobile adjustments */
   #moodDetailsFullScreen {
     padding-bottom: 80px !important;
@@ -533,6 +544,10 @@
     left: 50% !important;
     transform: translateX(-50%) !important;
     z-index: 10 !important;
+    padding: 10px 20px !important;
+    font-size: 14px !important;
+    width: auto !important;
+    height: auto !important;
   }
 }
 
