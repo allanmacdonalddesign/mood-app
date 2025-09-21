@@ -1420,8 +1420,23 @@
       jsTest.textContent = 'JAVASCRIPT IS RUNNING - WIDTH: ' + window.innerWidth;
     }
     
-    // Hide the side month name completely
+    // Debug: Check if calendar elements exist
     const sideMonthName = document.getElementById('calendarMonthName');
+    const mobileMonthName = document.getElementById('mobileMonthName');
+    const calendarGrid = document.getElementById('calendarGrid');
+    
+    console.log('Elements found:', {
+      sideMonthName: !!sideMonthName,
+      mobileMonthName: !!mobileMonthName,
+      calendarGrid: !!calendarGrid
+    });
+    
+    // Update test banner with element status
+    if (jsTest) {
+      jsTest.textContent = `JS RUNNING - WIDTH: ${window.innerWidth} - ELEMENTS: ${!!sideMonthName ? 'SIDE' : 'NO-SIDE'} ${!!mobileMonthName ? 'MOBILE' : 'NO-MOBILE'} ${!!calendarGrid ? 'GRID' : 'NO-GRID'}`;
+    }
+    
+    // Hide the side month name completely
     if (sideMonthName) {
       console.log('Hiding side month name...');
       sideMonthName.style.display = 'none';
@@ -1434,7 +1449,6 @@
     }
     
     // Show the mobile month name above calendar
-    const mobileMonthName = document.getElementById('mobileMonthName');
     if (mobileMonthName) {
       console.log('Showing mobile month name...');
       mobileMonthName.style.display = 'block';
@@ -1454,7 +1468,6 @@
     }
     
     // Make calendar more compact
-    const calendarGrid = document.getElementById('calendarGrid');
     if (calendarGrid) {
       calendarGrid.style.maxWidth = '100%';
       calendarGrid.style.width = '100%';
