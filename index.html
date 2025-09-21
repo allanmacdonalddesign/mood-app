@@ -510,6 +510,55 @@
     height: 120px !important;
     top: 35% !important;
   }
+  
+  /* Day view specific mobile adjustments */
+  #moodDetailsFullScreen {
+    padding-bottom: 80px !important;
+  }
+  
+  #moodDetailsFullContent {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    height: 100vh !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+  }
+  
+  #moodDetailsFullNote {
+    position: static !important;
+    bottom: auto !important;
+    left: auto !important;
+    transform: none !important;
+    margin-bottom: 20px !important;
+    order: 1 !important;
+  }
+  
+  #shareMoodButton {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    align-self: center !important;
+    margin-top: auto !important;
+    order: 2 !important;
+  }
+  
+  #moodFaceFull {
+    position: absolute !important;
+    top: 40% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 10 !important;
+  }
+  
+  #moodCanvasFull {
+    position: absolute !important;
+    top: 40% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 5 !important;
+  }
 }
 
 #backToMood:hover {
