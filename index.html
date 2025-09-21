@@ -511,7 +511,7 @@
   }
   
   #background {
-    top: 20% !important;
+    top: 10% !important;
     transform: translate(-50%, -50%) !important;
   }
 }
@@ -2226,6 +2226,7 @@ function handlePageSwipe() {
         currentIndex = newIndex;
         morphTo(newIndex);
         updateSlider(newIndex);
+        updateThumbPosition(newIndex);
       }
     } else {
       // Swipe left - go to next mood
@@ -2234,6 +2235,7 @@ function handlePageSwipe() {
         currentIndex = newIndex;
         morphTo(newIndex);
         updateSlider(newIndex);
+        updateThumbPosition(newIndex);
       }
     }
   }
