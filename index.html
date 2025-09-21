@@ -720,7 +720,9 @@
 /* Mobile-specific calendar styling */
 @media (max-width: 768px) {
   #calendarView {
-    padding: 20px 10px;
+    padding: 15px 5px;
+    width: 100%;
+    box-sizing: border-box;
   }
   
   #calendarHeader {
@@ -737,39 +739,50 @@
   }
   
   #calendarMonthName {
-    display: none; /* Hide the side month name on mobile */
+    display: none !important; /* Force hide the side month name on mobile */
   }
   
   /* Add mobile-specific month name above calendar */
   #calendarContent::before {
     content: attr(data-month-name);
-    display: block;
-    font-size: 32px;
+    display: block !important;
+    font-size: 28px;
     font-weight: bold;
     color: var(--page-text);
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    position: static !important;
+    transform: none !important;
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
   }
   
   #calendarGrid {
     max-width: 100%;
-    gap: 4px;
-    padding: 10px;
+    gap: 2px;
+    padding: 5px;
     border: 1px solid var(--page-stroke);
+    width: 100%;
+    box-sizing: border-box;
   }
   
   .calendar-day-header {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: bold;
-    padding: 6px 2px;
+    padding: 4px 1px;
     border-bottom: 1px solid var(--page-stroke);
+    text-align: center;
   }
   
   .calendar-day {
-    min-height: 40px;
-    font-size: 14px;
-    padding: 4px;
+    min-height: 32px;
+    font-size: 12px;
+    padding: 2px;
     border: 1px solid var(--page-stroke);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .calendar-day.has-mood {
