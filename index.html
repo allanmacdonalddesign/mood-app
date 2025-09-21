@@ -2031,12 +2031,23 @@ function loadMoodFace(elementId, moodName) {
       apngImg.style.objectFit = 'contain';
       apngImg.style.zIndex = '10';
       
-      // Find the background element to append to
-      const background = document.getElementById('background');
-      if (background) {
-        background.appendChild(apngImg);
-      } else if (faceVid && faceVid.parentNode) {
-        faceVid.parentNode.appendChild(apngImg);
+      // Find the correct container to append to
+      if (elementId === 'moodFaceFull') {
+        // For day view, append to moodDetailsFullContent
+        const dayViewContainer = document.getElementById('moodDetailsFullContent');
+        if (dayViewContainer) {
+          dayViewContainer.appendChild(apngImg);
+        } else if (faceVid && faceVid.parentNode) {
+          faceVid.parentNode.appendChild(apngImg);
+        }
+      } else {
+        // For main page, append to background
+        const background = document.getElementById('background');
+        if (background) {
+          background.appendChild(apngImg);
+        } else if (faceVid && faceVid.parentNode) {
+          faceVid.parentNode.appendChild(apngImg);
+        }
       }
     }
     console.log('Setting APNG src to:', apngPath);
