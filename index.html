@@ -517,7 +517,18 @@
   
   #moodDetailsFullNote {
     position: absolute !important;
-    bottom: 120px !important;
+    bottom: 150px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    max-width: 90% !important;
+    width: 90% !important;
+    text-align: center !important;
+    z-index: 10 !important;
+  }
+  
+  #moodLabelFull {
+    position: absolute !important;
+    bottom: 150px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
     max-width: 90% !important;
@@ -2016,7 +2027,6 @@ function loadMoodFace(elementId, moodName) {
       apngImg = document.createElement('img');
       apngImg.id = elementId + 'Apng';
       apngImg.style.position = 'absolute';
-      apngImg.style.top = '50%';
       apngImg.style.left = '50%';
       apngImg.style.transform = 'translate(-50%, -50%)';
       // Use mobile-specific size and positioning if on mobile
@@ -2024,9 +2034,11 @@ function loadMoodFace(elementId, moodName) {
       apngImg.style.width = isMobile ? '120px' : '200px';
       apngImg.style.height = isMobile ? '120px' : '200px';
       
-      // For day view on mobile, position higher and center better
+      // Set the top position based on element type and device
       if (isMobile && elementId === 'moodFaceFull') {
         apngImg.style.top = '35%';
+      } else {
+        apngImg.style.top = '50%';
       }
       apngImg.style.objectFit = 'contain';
       apngImg.style.zIndex = '10';
