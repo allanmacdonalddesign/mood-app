@@ -1392,9 +1392,76 @@
 
   // Initialize date display
   updateDateDisplay();
+  
+  // Handle window resize for mobile layout
+  window.addEventListener('resize', function() {
+    if (window.innerWidth <= 768) {
+      setupMobileLayout();
+    }
+  });
 
   // Calendar functionality
   let currentCalendarDate = new Date();
+  
+  function setupMobileLayout() {
+    console.log('Setting up mobile layout...');
+    
+    // Hide the side month name completely
+    const sideMonthName = document.getElementById('calendarMonthName');
+    if (sideMonthName) {
+      sideMonthName.style.display = 'none';
+      sideMonthName.style.visibility = 'hidden';
+      sideMonthName.style.opacity = '0';
+      sideMonthName.style.position = 'absolute';
+      sideMonthName.style.left = '-9999px';
+    }
+    
+    // Show the mobile month name above calendar
+    const mobileMonthName = document.getElementById('mobileMonthName');
+    if (mobileMonthName) {
+      mobileMonthName.style.display = 'block';
+      mobileMonthName.style.visibility = 'visible';
+      mobileMonthName.style.opacity = '1';
+      mobileMonthName.style.position = 'static';
+      mobileMonthName.style.transform = 'none';
+      mobileMonthName.style.writingMode = 'horizontal-tb';
+      mobileMonthName.style.textOrientation = 'mixed';
+      mobileMonthName.style.fontSize = '28px';
+      mobileMonthName.style.fontWeight = 'bold';
+      mobileMonthName.style.textAlign = 'center';
+      mobileMonthName.style.marginBottom = '15px';
+      mobileMonthName.style.color = 'var(--page-text)';
+    }
+    
+    // Make calendar more compact
+    const calendarGrid = document.getElementById('calendarGrid');
+    if (calendarGrid) {
+      calendarGrid.style.maxWidth = '100%';
+      calendarGrid.style.width = '100%';
+      calendarGrid.style.gap = '0px';
+      calendarGrid.style.padding = '1px';
+      calendarGrid.style.boxSizing = 'border-box';
+      calendarGrid.style.margin = '0';
+    }
+    
+    // Make calendar content more compact
+    const calendarContent = document.getElementById('calendarContent');
+    if (calendarContent) {
+      calendarContent.style.padding = '0 5px';
+      calendarContent.style.maxWidth = '100%';
+      calendarContent.style.gap = '0px';
+    }
+    
+    // Make calendar view more compact
+    const calendarView = document.getElementById('calendarView');
+    if (calendarView) {
+      calendarView.style.padding = '15px 5px';
+      calendarView.style.width = '100%';
+      calendarView.style.boxSizing = 'border-box';
+    }
+    
+    console.log('Mobile layout setup complete');
+  }
   
   function showCalendar() {
     document.getElementById('background').style.display = 'none';
@@ -1424,6 +1491,11 @@
     
     // Set mobile month name
     document.getElementById('mobileMonthName').textContent = monthNamesShort[month];
+    
+    // JavaScript-based mobile layout fix
+    if (window.innerWidth <= 768) {
+      setupMobileLayout();
+    }
     
     // Clear calendar grid
     const grid = document.getElementById('calendarGrid');
