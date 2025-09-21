@@ -545,6 +545,9 @@
     padding: 12px !important;
     width: 48px !important;
     height: 48px !important;
+    z-index: 100 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
   }
   
   #closeMoodDetailsFull:hover {
@@ -1417,7 +1420,12 @@
   });
   
   // Event listeners for full-screen mood details
-  document.getElementById('closeMoodDetailsFull').addEventListener('click', hideMoodDetailsFull);
+  document.getElementById('closeMoodDetailsFull').addEventListener('click', function(e) {
+    console.log('Close button clicked!');
+    e.preventDefault();
+    e.stopPropagation();
+    hideMoodDetailsFull();
+  });
   document.getElementById('moodDetailsFullScreen').addEventListener('click', (e) => {
     if (e.target === e.currentTarget) {
       hideMoodDetailsFull();
