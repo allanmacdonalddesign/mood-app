@@ -3,6 +3,9 @@
 <head>
   <title>Mood Morph Slider</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   
   <!-- Open Graph meta tags for social media sharing -->
   <meta property="og:title" content="Mood App - Track Your Daily Moods">
@@ -2129,6 +2132,107 @@ document.addEventListener('mouseup', (e) => {
     currentIndex = closestIndex;
   }
 });
+
+// Touch events for mobile swipe functionality
+slider.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  isDragging = true;
+  trackRect = slider.getBoundingClientRect();
+});
+
+// Page-level swipe gestures for mood navigation
+let pageTouchStartX = 0;
+let pageTouchStartY = 0;
+let pageTouchEndX = 0;
+let pageTouchEndY = 0;
+
+document.addEventListener('touchmove', (e) => {
+  if (!isDragging) return;
+  e.preventDefault();
+  const touch = e.touches[0];
+  const x = touch.clientX - trackRect.left;
+  const clampedX = Math.max(0, Math.min(trackRect.width, x));
+  const percent = clampedX / trackRect.width;
+  thumb.style.left = `${percent * 100}%`;
+
+  thumb.style.transform = 'translate(-50%, -50%) scale(1.3, 0.7)';
+});
+
+document.addEventListener('touchend', (e) => {
+  if (!isDragging) return;
+  e.preventDefault();
+  isDragging = false;
+  thumb.style.transform = 'translate(-50%, -50%) scale(1, 1)';
+
+  const dots = document.querySelectorAll('.slider-dot');
+  const touch = e.changedTouches[0];
+  const x = touch.clientX - trackRect.left;
+
+  let closestIndex = 0;
+  let minDistance = Infinity;
+  dots.forEach((dot, i) => {
+    const rect = dot.getBoundingClientRect();
+    const center = rect.left + rect.width / 2 - trackRect.left;
+    const distance = Math.abs(x - center);
+    if (distance < minDistance) {
+      minDistance = distance;
+      closestIndex = i;
+    }
+  });
+
+  updateThumbPosition(closestIndex);
+  updateSlider(closestIndex);
+
+  if (closestIndex !== currentIndex && !isMorphing) {
+    morphTo(closestIndex);
+    updateSlider(closestIndex);
+    currentIndex = closestIndex;
+  }
+});
+
+// Page-level touch event handlers for mood navigation
+document.addEventListener('touchstart', (e) => {
+  // Only handle page swipes if not interacting with slider
+  if (!isDragging) {
+    pageTouchStartX = e.changedTouches[0].screenX;
+    pageTouchStartY = e.changedTouches[0].screenY;
+  }
+});
+
+document.addEventListener('touchend', (e) => {
+  // Only handle page swipes if not interacting with slider
+  if (!isDragging) {
+    pageTouchEndX = e.changedTouches[0].screenX;
+    pageTouchEndY = e.changedTouches[0].screenY;
+    handlePageSwipe();
+  }
+});
+
+function handlePageSwipe() {
+  const deltaX = pageTouchEndX - pageTouchStartX;
+  const deltaY = pageTouchEndY - pageTouchStartY;
+  
+  // Only trigger if horizontal swipe is more significant than vertical
+  if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+    if (deltaX > 0) {
+      // Swipe right - go to previous mood
+      if (currentIndex > 0 && !isMorphing) {
+        const newIndex = currentIndex - 1;
+        currentIndex = newIndex;
+        morphTo(newIndex);
+        updateSlider(newIndex);
+      }
+    } else {
+      // Swipe left - go to next mood
+      if (currentIndex < moods.length - 1 && !isMorphing) {
+        const newIndex = currentIndex + 1;
+        currentIndex = newIndex;
+        morphTo(newIndex);
+        updateSlider(newIndex);
+      }
+    }
+  }
+}
 
 
 
