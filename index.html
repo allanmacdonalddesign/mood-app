@@ -322,6 +322,13 @@
   transform: translateX(-50%);
 }
 
+/* Mobile-specific gap for calendarMonthYear */
+@media (max-width: 768px) {
+  #calendarMonthYear {
+    gap: 20px !important;
+  }
+}
+
 #calendarMonthNumber {
   font-size: 48px;
   font-weight: bold;
@@ -486,6 +493,13 @@
   text-transform: lowercase;
   font-family: 'SF Pro Display', 'Helvetica Neue', 'Avenir Next', 'Segoe UI', 'Roboto', sans-serif;
   letter-spacing: 0.5px;
+}
+
+/* Mobile-specific positioning for back button */
+@media (max-width: 768px) {
+  #backToMood {
+    bottom: 100px !important;
+  }
 }
 
 #backToMood:hover {
@@ -737,10 +751,6 @@
 
 /* Mobile-specific calendar styling */
 @media (max-width: 768px) {
-  #mobileTest {
-    display: block !important;
-  }
-  
   #calendarView {
     padding: 15px 5px;
     width: 100%;
@@ -748,13 +758,17 @@
   }
   
   #calendarContent {
-    padding: 0 5px !important;
+    padding: 0 0px !important;
     max-width: 100% !important;
     gap: 0px !important;
+    display: block !important;
+    position: relative !important;
   }
   
   #calendarHeader {
     margin-bottom: 30px;
+    width: 100% !important;
+    max-width: 100% !important;
   }
   
   #calendarMonthNumber {
@@ -1072,9 +1086,6 @@
     
     <!-- Calendar view -->
     <div id="calendarView" style="display: none;">
-      <div style="text-align: center; color: red; font-weight: bold; padding: 10px;">TEST VERSION 2.0 - MOBILE FIX</div>
-      <div id="mobileTest" style="display: none; text-align: center; color: blue; font-weight: bold; padding: 5px;">MOBILE CSS IS WORKING</div>
-      <div id="jsTest" style="display: none; text-align: center; color: green; font-weight: bold; padding: 5px;">JAVASCRIPT IS RUNNING</div>
       <div id="calendarHeader">
         <button id="prevMonth">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1413,13 +1424,6 @@
   function setupMobileLayout() {
     console.log('Setting up mobile layout...');
     
-    // Show JavaScript test banner
-    const jsTest = document.getElementById('jsTest');
-    if (jsTest) {
-      jsTest.style.display = 'block';
-      jsTest.textContent = 'JAVASCRIPT IS RUNNING - WIDTH: ' + window.innerWidth;
-    }
-    
     // Debug: Check if calendar elements exist
     const sideMonthName = document.getElementById('calendarMonthName');
     const mobileMonthName = document.getElementById('mobileMonthName');
@@ -1430,11 +1434,6 @@
       mobileMonthName: !!mobileMonthName,
       calendarGrid: !!calendarGrid
     });
-    
-    // Update test banner with element status
-    if (jsTest) {
-      jsTest.textContent = `JS RUNNING - WIDTH: ${window.innerWidth} - ELEMENTS: ${!!sideMonthName ? 'SIDE' : 'NO-SIDE'} ${!!mobileMonthName ? 'MOBILE' : 'NO-MOBILE'} ${!!calendarGrid ? 'GRID' : 'NO-GRID'}`;
-    }
     
     // Hide the side month name completely
     if (sideMonthName) {
@@ -1480,9 +1479,11 @@
     // Make calendar content more compact
     const calendarContent = document.getElementById('calendarContent');
     if (calendarContent) {
-      calendarContent.style.padding = '0 5px';
+      calendarContent.style.padding = '0 0px';
       calendarContent.style.maxWidth = '100%';
       calendarContent.style.gap = '0px';
+      calendarContent.style.display = 'block';
+      calendarContent.style.position = 'relative';
     }
     
     // Make calendar view more compact
@@ -1491,6 +1492,13 @@
       calendarView.style.padding = '15px 5px';
       calendarView.style.width = '100%';
       calendarView.style.boxSizing = 'border-box';
+    }
+    
+    // Fix calendar header width
+    const calendarHeader = document.getElementById('calendarHeader');
+    if (calendarHeader) {
+      calendarHeader.style.width = '100%';
+      calendarHeader.style.maxWidth = '100%';
     }
     
     console.log('Mobile layout setup complete');
