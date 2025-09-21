@@ -1074,6 +1074,7 @@
     <div id="calendarView" style="display: none;">
       <div style="text-align: center; color: red; font-weight: bold; padding: 10px;">TEST VERSION 2.0 - MOBILE FIX</div>
       <div id="mobileTest" style="display: none; text-align: center; color: blue; font-weight: bold; padding: 5px;">MOBILE CSS IS WORKING</div>
+      <div id="jsTest" style="display: none; text-align: center; color: green; font-weight: bold; padding: 5px;">JAVASCRIPT IS RUNNING</div>
       <div id="calendarHeader">
         <button id="prevMonth">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1399,6 +1400,12 @@
       setupMobileLayout();
     }
   });
+  
+  // Test mobile layout immediately on page load
+  if (window.innerWidth <= 768) {
+    console.log('Page loaded on mobile, setting up layout...');
+    setTimeout(setupMobileLayout, 100); // Small delay to ensure DOM is ready
+  }
 
   // Calendar functionality
   let currentCalendarDate = new Date();
@@ -1406,19 +1413,30 @@
   function setupMobileLayout() {
     console.log('Setting up mobile layout...');
     
+    // Show JavaScript test banner
+    const jsTest = document.getElementById('jsTest');
+    if (jsTest) {
+      jsTest.style.display = 'block';
+      jsTest.textContent = 'JAVASCRIPT IS RUNNING - WIDTH: ' + window.innerWidth;
+    }
+    
     // Hide the side month name completely
     const sideMonthName = document.getElementById('calendarMonthName');
     if (sideMonthName) {
+      console.log('Hiding side month name...');
       sideMonthName.style.display = 'none';
       sideMonthName.style.visibility = 'hidden';
       sideMonthName.style.opacity = '0';
       sideMonthName.style.position = 'absolute';
       sideMonthName.style.left = '-9999px';
+    } else {
+      console.log('Side month name element not found!');
     }
     
     // Show the mobile month name above calendar
     const mobileMonthName = document.getElementById('mobileMonthName');
     if (mobileMonthName) {
+      console.log('Showing mobile month name...');
       mobileMonthName.style.display = 'block';
       mobileMonthName.style.visibility = 'visible';
       mobileMonthName.style.opacity = '1';
@@ -1431,6 +1449,8 @@
       mobileMonthName.style.textAlign = 'center';
       mobileMonthName.style.marginBottom = '15px';
       mobileMonthName.style.color = 'var(--page-text)';
+    } else {
+      console.log('Mobile month name element not found!');
     }
     
     // Make calendar more compact
