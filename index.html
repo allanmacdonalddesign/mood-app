@@ -290,6 +290,24 @@
   right: 0;
 }
 
+/* Mobile-specific button positioning */
+@media (max-width: 768px) {
+  #calendarHeader button {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
+  }
+  
+  #calendarHeader button:first-child {
+    left: 10px;
+  }
+  
+  #calendarHeader button:last-child {
+    right: 10px;
+  }
+}
+
 #calendarHeader button:hover {
   background: var(--page-text);
   opacity: 0.8;
@@ -740,21 +758,25 @@
   
   #calendarMonthName {
     display: none !important; /* Force hide the side month name on mobile */
+    visibility: hidden !important;
+    opacity: 0 !important;
   }
   
   /* Add mobile-specific month name above calendar */
   #calendarContent::before {
-    content: attr(data-month-name);
+    content: attr(data-month-name) !important;
     display: block !important;
-    font-size: 28px;
-    font-weight: bold;
-    color: var(--page-text);
-    text-align: center;
-    margin-bottom: 15px;
+    font-size: 28px !important;
+    font-weight: bold !important;
+    color: var(--page-text) !important;
+    text-align: center !important;
+    margin-bottom: 15px !important;
     position: static !important;
     transform: none !important;
     writing-mode: horizontal-tb !important;
     text-orientation: mixed !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
   
   #calendarGrid {
@@ -1021,6 +1043,7 @@
     
     <!-- Calendar view -->
     <div id="calendarView" style="display: none;">
+      <div style="text-align: center; color: red; font-weight: bold; padding: 10px;">TEST VERSION 2.0 - MOBILE FIX</div>
       <div id="calendarHeader">
         <button id="prevMonth">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
