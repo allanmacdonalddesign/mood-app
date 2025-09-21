@@ -2034,12 +2034,8 @@ function loadMoodFace(elementId, moodName) {
       apngImg.style.width = isMobile ? '120px' : '200px';
       apngImg.style.height = isMobile ? '120px' : '200px';
       
-      // Set the top position based on element type and device
-      if (isMobile && elementId === 'moodFaceFull') {
-        apngImg.style.top = '35%';
-      } else {
-        apngImg.style.top = '50%';
-      }
+      // Set the top position - always 50% for all cases
+      apngImg.style.top = '50%';
       apngImg.style.objectFit = 'contain';
       apngImg.style.zIndex = '10';
       
