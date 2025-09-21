@@ -500,6 +500,12 @@
   #backToMood {
     bottom: 100px !important;
   }
+  
+  /* Mobile-specific mood face size */
+  #moodFace, #moodFaceFull {
+    width: 120px !important;
+    height: 120px !important;
+  }
 }
 
 #backToMood:hover {
@@ -777,7 +783,7 @@
   }
   
   #calendarYear {
-    font-size: 24px;
+    font-size: 48px;
   }
   
   #calendarMonthName {
@@ -801,7 +807,7 @@
   /* Show mobile-specific month name above calendar */
   #mobileMonthName {
     display: block !important;
-    font-size: 28px !important;
+    font-size: 68px !important;
     font-weight: bold !important;
     color: var(--page-text) !important;
     text-align: center !important;
@@ -1979,8 +1985,10 @@ function loadMoodFace(elementId, moodName) {
       apngImg.style.top = '50%';
       apngImg.style.left = '50%';
       apngImg.style.transform = 'translate(-50%, -50%)';
-      apngImg.style.width = '200px';
-      apngImg.style.height = '200px';
+      // Use mobile-specific size if on mobile
+      const isMobile = window.innerWidth <= 768;
+      apngImg.style.width = isMobile ? '120px' : '200px';
+      apngImg.style.height = isMobile ? '120px' : '200px';
       apngImg.style.objectFit = 'contain';
       apngImg.style.zIndex = '10';
       
