@@ -290,21 +290,20 @@
   right: 0;
 }
 
-/* Mobile-specific button positioning */
+/* Mobile-specific button positioning - keep original positioning */
 @media (max-width: 768px) {
   #calendarHeader button {
-    position: fixed;
+    position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 1000;
   }
   
   #calendarHeader button:first-child {
-    left: 10px;
+    left: 0;
   }
   
   #calendarHeader button:last-child {
-    right: 10px;
+    right: 0;
   }
 }
 
@@ -762,9 +761,8 @@
     opacity: 0 !important;
   }
   
-  /* Add mobile-specific month name above calendar */
-  #calendarContent::before {
-    content: attr(data-month-name) !important;
+  /* Show mobile-specific month name above calendar */
+  #mobileMonthName {
     display: block !important;
     font-size: 28px !important;
     font-weight: bold !important;
@@ -781,25 +779,31 @@
   
   #calendarGrid {
     max-width: 100%;
-    gap: 2px;
-    padding: 5px;
+    gap: 1px;
+    padding: 3px;
     border: 1px solid var(--page-stroke);
     width: 100%;
     box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
   }
   
   .calendar-day-header {
-    font-size: 10px;
+    font-size: 9px;
     font-weight: bold;
-    padding: 4px 1px;
+    padding: 2px 0px;
     border-bottom: 1px solid var(--page-stroke);
     text-align: center;
+    min-height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .calendar-day {
-    min-height: 32px;
-    font-size: 12px;
-    padding: 2px;
+    min-height: 28px;
+    font-size: 11px;
+    padding: 1px;
     border: 1px solid var(--page-stroke);
     text-align: center;
     display: flex;
@@ -1063,6 +1067,7 @@
       
       <div id="calendarContent">
         <div id="calendarMonthName"></div>
+        <div id="mobileMonthName" style="display: none;"></div>
         <div id="calendarGrid"></div>
       </div>
       
@@ -1391,8 +1396,8 @@
     document.getElementById('calendarYear').textContent = year;
     document.getElementById('calendarMonthName').textContent = monthNamesShort[month];
     
-    // Set data attribute for mobile month name
-    document.getElementById('calendarContent').setAttribute('data-month-name', monthNamesShort[month]);
+    // Set mobile month name
+    document.getElementById('mobileMonthName').textContent = monthNamesShort[month];
     
     // Clear calendar grid
     const grid = document.getElementById('calendarGrid');
