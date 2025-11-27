@@ -1314,7 +1314,11 @@
 
   function saveMoodEntry() {
     const today = new Date();
-    const dateKey = today.toISOString().split('T')[0]; // YYYY-MM-DD format
+    // Use local date methods to match how calendar determines "today"
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const dateKey = `${year}-${month}-${day}`; // YYYY-MM-DD format (local time)
     const note = document.getElementById('noteInput').value.trim();
     
     const moodEntry = {
@@ -1483,19 +1487,6 @@
   // Initialize date display
   updateDateDisplay();
   
-  // Handle window resize for mobile layout
-  window.addEventListener('resize', function() {
-    if (window.innerWidth <= 768) {
-      setupMobileLayout();
-    }
-  });
-  
-  // Test mobile layout immediately on page load
-  if (window.innerWidth <= 768) {
-    console.log('Page loaded on mobile, setting up layout...');
-    setTimeout(setupMobileLayout, 100); // Small delay to ensure DOM is ready
-  }
-
   // Calendar functionality
   let currentCalendarDate = new Date();
   
@@ -1582,6 +1573,92 @@
     console.log('Mobile layout setup complete');
   }
   
+  function setupDesktopLayout() {
+    console.log('Setting up desktop layout...');
+    
+    // Reset side month name to default (CSS will handle it)
+    const sideMonthName = document.getElementById('calendarMonthName');
+    if (sideMonthName) {
+      sideMonthName.style.display = '';
+      sideMonthName.style.visibility = '';
+      sideMonthName.style.opacity = '';
+      sideMonthName.style.position = '';
+      sideMonthName.style.left = '';
+    }
+    
+    // Hide the mobile month name
+    const mobileMonthName = document.getElementById('mobileMonthName');
+    if (mobileMonthName) {
+      mobileMonthName.style.display = 'none';
+      mobileMonthName.style.visibility = '';
+      mobileMonthName.style.opacity = '';
+      mobileMonthName.style.position = '';
+      mobileMonthName.style.transform = '';
+      mobileMonthName.style.writingMode = '';
+      mobileMonthName.style.textOrientation = '';
+      mobileMonthName.style.fontSize = '';
+      mobileMonthName.style.fontWeight = '';
+      mobileMonthName.style.textAlign = '';
+      mobileMonthName.style.marginBottom = '';
+      mobileMonthName.style.color = '';
+    }
+    
+    // Reset calendar grid styles (let CSS handle it)
+    const calendarGrid = document.getElementById('calendarGrid');
+    if (calendarGrid) {
+      calendarGrid.style.maxWidth = '';
+      calendarGrid.style.width = '';
+      calendarGrid.style.gap = '';
+      calendarGrid.style.padding = '';
+      calendarGrid.style.boxSizing = '';
+      calendarGrid.style.margin = '';
+    }
+    
+    // Reset calendar content styles (let CSS handle it)
+    const calendarContent = document.getElementById('calendarContent');
+    if (calendarContent) {
+      calendarContent.style.padding = '';
+      calendarContent.style.maxWidth = '';
+      calendarContent.style.gap = '';
+      calendarContent.style.display = '';
+      calendarContent.style.position = '';
+    }
+    
+    // Reset calendar view styles (let CSS handle it)
+    const calendarView = document.getElementById('calendarView');
+    if (calendarView) {
+      calendarView.style.padding = '';
+      calendarView.style.width = '';
+      calendarView.style.boxSizing = '';
+    }
+    
+    // Reset calendar header styles (let CSS handle it)
+    const calendarHeader = document.getElementById('calendarHeader');
+    if (calendarHeader) {
+      calendarHeader.style.width = '';
+      calendarHeader.style.maxWidth = '';
+    }
+    
+    console.log('Desktop layout setup complete');
+  }
+  
+  // Handle window resize for responsive layout
+  window.addEventListener('resize', function() {
+    if (window.innerWidth <= 768) {
+      setupMobileLayout();
+    } else {
+      setupDesktopLayout();
+    }
+  });
+  
+  // Test layout immediately on page load
+  if (window.innerWidth <= 768) {
+    console.log('Page loaded on mobile, setting up layout...');
+    setTimeout(setupMobileLayout, 100); // Small delay to ensure DOM is ready
+  } else {
+    setTimeout(setupDesktopLayout, 100); // Ensure desktop layout is set
+  }
+  
   function showCalendar() {
     document.getElementById('background').style.display = 'none';
     document.getElementById('calendarView').style.display = 'block';
@@ -1611,9 +1688,11 @@
     // Set mobile month name
     document.getElementById('mobileMonthName').textContent = monthNamesShort[month];
     
-    // JavaScript-based mobile layout fix
+    // Apply appropriate layout based on window size
     if (window.innerWidth <= 768) {
       setupMobileLayout();
+    } else {
+      setupDesktopLayout();
     }
     
     // Clear calendar grid
